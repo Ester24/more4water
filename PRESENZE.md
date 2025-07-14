@@ -25,7 +25,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Implementazione lettura CSV | |
+| 14/07/2025 | 14:10 - 18:10 | X ore | Implementazione lettura CSV | |
 | DD/MM/YYYY | HH:MM - HH:MM | X ore | Design database SQLite | |
 | DD/MM/YYYY | HH:MM - HH:MM | X ore | Creazione prime pagine GUI | |
 | | | | | |

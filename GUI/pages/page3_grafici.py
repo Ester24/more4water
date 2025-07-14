@@ -65,9 +65,6 @@ layout = html.Div([
     'backgroundColor': 'transparent',  # nessuno sfondo
 })
 
-
-
-
 @dash.callback(
     Output('sensore-graph', 'figure'),
     Output('error-message', 'children'),
@@ -87,7 +84,7 @@ def mostra_grafico(query_string):
 
     # Verifica sensore valido
     if sensore is None or sensore not in df.columns:
-        return go.Figure(), f"Errore: sensore '{sensore}' non valido.", ""
+        return go.Figure(), f"Error: the sensor '{sensore}' is invalid.", ""
 
     # Costruzione datetime
     def build_datetime(date_str, hour, minute):
@@ -100,7 +97,7 @@ def mostra_grafico(query_string):
     df_filtered = df[(df['created_at'] >= start_dt) & (df['created_at'] <= end_dt)]
 
     if df_filtered.empty:
-        return go.Figure(), "Nessun dato disponibile per l'intervallo selezionato.", ""
+        return go.Figure(), "No records found within the selected time interval.", ""
 
     # Etichetta sensore leggibile
     label_sensore = sensor_labels.get(sensore, sensore)
@@ -114,7 +111,8 @@ def mostra_grafico(query_string):
         name=label_sensore,
         marker=dict(color='RoyalBlue'),
         line=dict(color='RoyalBlue'),
-        hovertemplate='Data: %{x}<br>Valore: %{y}<extra></extra>'
+        hovertemplate='Date: %{x}<br>Value: %{y}<extra></extra>'
+
     ))
 
 
