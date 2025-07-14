@@ -35,7 +35,18 @@ button.btn{
     color: white;
     transition: background-color 0.3s ease;
 }
+a.btn.btn-warning {
+    background-color: #f1c40f !important;
+    border-color: #d4ac0d !important;
+    color: #222222 !important;
+    font-weight: bold !important;
+    text-decoration: none !important;
+}
 
+a.btn.btn-warning:hover {
+    background-color: #d4ac0d !important;
+    color: #000000 !important;
+}
 /* Hover effetto */
 button.btn:hover {
     background-color: #6688cc;

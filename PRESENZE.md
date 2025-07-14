@@ -1,9 +1,9 @@
 # 📋 Registro Presenze - Tirocinio More4Water_GUI
 
-**Studentessa**: [Nome Cognome]  
+**Studentessa**: [Ester Bernardini]  
 **Tutor**: [Nome Tutor]  
-**Periodo**: [Data Inizio] - [Data Fine]  
-**Ore Totali Previste**: [X] ore
+**Periodo**: [04/07/2025] - [05/09/2025]  
+**Ore Totali Previste**: [75] ore
 
 ---
 
@@ -13,12 +13,13 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Setup ambiente di sviluppo, studio documentazione | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Analisi codice esistente, comprensione architettura | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Primi test con Plotly Dash | |
+| 04/07/2025 | 09:30 - 13:30 | 4 ore | Setup ambiente di sviluppo, studio documentazione | |
+| 07/07/2025 | 10:00 - 14:00 | 4 ore | Analisi codice esistente, comprensione architettura | |
+| 08/07/2025 | 10:30 - 14:30 | 4 ore | Primi test con Plotly Dash | |
+| 08/07/2025 | 13:30 - 17:30 | 4 ore | Primi test con Plotly Dash | |
 | | | | | |
 
-**Totale Settimana**: X ore
+**Totale Settimana**: 16 ore
 
 ### Settimana 2
 
