@@ -43,7 +43,6 @@ layout = html.Div([
     ),
 
     html.Div(id='error-message', style={'color': 'red', 'textAlign': 'center', 'marginTop': '10px'}),
-
     html.Div(id='selected-dates', style={'textAlign': 'center', 'marginTop': '10px', 'fontWeight': 'bold'}),
 
     html.Div(
@@ -56,14 +55,15 @@ layout = html.Div([
     'width': '1000px',
     'height': '600px',
     'margin': '0 auto',
-    'padding': '0',  # niente padding
+    'padding': '0',
     'boxSizing': 'border-box',
     'overflow': 'hidden',
     'display': 'flex',
     'flexDirection': 'column',
     'justifyContent': 'flex-start',
-    'backgroundColor': 'transparent',  # nessuno sfondo
+    'backgroundColor': 'transparent',
 })
+
 
 @dash.callback(
     Output('sensore-graph', 'figure'),
@@ -76,33 +76,43 @@ def mostra_grafico(query_string):
     params = parse.parse_qs(query_string[1:])
     sensore = params.get('sensore', [None])[0]
     sd = params.get('sd', [None])[0]
-    sh = int(params.get('sh', [0])[0])
-    sm = int(params.get('sm', [0])[0])
     ed = params.get('ed', [None])[0]
-    eh = int(params.get('eh', [0])[0])
-    em = int(params.get('em', [0])[0])
+    sh = params.get('sh', [None])[0]
+    sm = params.get('sm', [None])[0]
+    eh = params.get('eh', [None])[0]
+    em = params.get('em', [None])[0]
 
-    # Verifica sensore valido
     if sensore is None or sensore not in df.columns:
-        return go.Figure(), f"Error: the sensor '{sensore}' is invalid.", ""
+        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido.", ""
 
-    # Costruzione datetime
     def build_datetime(date_str, hour, minute):
         return datetime.strptime(date_str, '%Y-%m-%d').replace(hour=hour, minute=minute)
 
-    start_dt = build_datetime(sd, sh, sm)
-    end_dt = build_datetime(ed, eh, em)
+    try:
+        if sd and ed and not any([sh, sm, eh, em]):
+            start_dt = build_datetime(sd, 0, 0)
+            end_dt = build_datetime(ed, 23, 59)
+        else:
+            sh = int(sh) if sh else 0
+            sm = int(sm) if sm else 0
+            eh = int(eh) if eh else 0
+            em = int(em) if em else 0
 
-    # Filtro dati
+            if ed and not (eh or em):
+                eh, em = 23, 59
+
+            start_dt = build_datetime(sd, sh, sm)
+            end_dt = build_datetime(ed, eh, em)
+    except Exception:
+        return go.Figure(), "Errore nel formato di data o orario.", ""
+
     df_filtered = df[(df['created_at'] >= start_dt) & (df['created_at'] <= end_dt)]
 
     if df_filtered.empty:
-        return go.Figure(), "No records found within the selected time interval.", ""
+        return go.Figure(), "Nessun dato trovato nell'intervallo selezionato.", ""
 
-    # Etichetta sensore leggibile
     label_sensore = sensor_labels.get(sensore, sensore)
 
-    # Costruzione grafico
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df_filtered['created_at'],
@@ -111,23 +121,23 @@ def mostra_grafico(query_string):
         name=label_sensore,
         marker=dict(color='RoyalBlue'),
         line=dict(color='RoyalBlue'),
-        hovertemplate='Date: %{x}<br>Value: %{y}<extra></extra>'
-
+        hovertemplate='Date: %{x|%d %b %Y %H:%M}<br>Value: %{y}<extra></extra>'
     ))
 
-
-    # Layout grafico
     fig.update_layout(
-    title=f'{label_sensore} Time Series',
-    xaxis_title='Timestamp',
-    yaxis_title='Values',
-    template='plotly_white'
+        title=f'Time Series - {label_sensore}',
+        xaxis_title='Date',
+        yaxis_title='Values',
+        template='plotly_white'
+    )
+
+    fig.update_xaxes(
+        tickformat='%d %b %y',  # ← ad esempio: 15 Jul 25
+        tickangle=0
     )
 
 
+
     intervallo_testo = f"Intervallo selezionato: {start_dt.strftime('%d/%m/%Y %H:%M')} → {end_dt.strftime('%d/%m/%Y %H:%M')}"
-
-
     return fig, "", intervallo_testo
-
 

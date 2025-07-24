@@ -1,82 +1,604 @@
-/* Colore di sfondo del titolo */
-body {
-    background-color: #001133;
-}
-h1 {
-    background-color: #001133;
-    color: white;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    text-align: center;
-    margin-top: 20px;
-    padding: 10px;
-    border-radius: 8px;
+/* === Stili globali === */
+html, body {
+    background-color: #e3f2fd !important; /* Blu molto chiaro, quasi bianco per lo sfondo (simula acqua calma) */
+    color: #0d47a1 !important; /* Blu scuro principale per il testo (blu intenso) */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+    overflow-y: auto !important; /* Permetti lo scroll verticale solo se necessario */
 }
 
-/* Input centrato con bordo e padding */
-input[type="text"] {
-    text-align: left;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-    border: 2px solid #444488;
-    border-radius: 5px;
-    padding: 8px;
-    font-size: 1.1rem;
+/* === Navbar === */
+.navbar {
+    padding-top: 5px !important; /* Ridotto */
+    padding-bottom: 5px !important; /* Ridotto */
+    min-height: 50px !important; /* Leggermente più piccola */
+    background-color: #1565c0 !important; /* Blu medio-scuro per la navbar (blu profondo) */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
 }
-
-/* Pulsanti */
-button.btn{
-    font-weight: bold;
-    font-size: 1.1rem;
-    border-radius: 8px;
-    padding: 10px 20px;
-    margin: 5px;
-    color: #6688cc;
-    background-color: #6688cc;
-    border-color: #334477;
-    color: white;
-    transition: background-color 0.3s ease;
+.navbar .container-fluid {
+    height: 100% !important;
+    align-items: center !important;
 }
-a.btn.btn-warning {
-    background-color: #f1c40f !important;
-    border-color: #d4ac0d !important;
-    color: #222222 !important;
+.navbar-brand {
+    font-size: 1.6em !important; /* Leggermente più piccolo */
+    color: #ffffff !important; /* Testo bianco */
     font-weight: bold !important;
-    text-decoration: none !important;
+}
+.navbar-brand:hover {
+    color: #bbdefb !important; /* Blu più chiaro al passaggio del mouse */
 }
 
-a.btn.btn-warning:hover {
-    background-color: #d4ac0d !important;
-    color: #000000 !important;
+
+/* === Titolo H1 === */
+#h1-title-wrapper {
+    display: flex !important;
+    justify-content: center !important;
+    margin-bottom: 15px !important; /* Spazio ridotto dopo l'H1 */
+    margin-top: 15px !important; /* Spazio ridotto prima dell'H1 */
 }
-/* Hover effetto */
-button.btn:hover {
-    background-color: #6688cc;
-    color: #ffffff;
+#h1-title-wrapper h1.my-custom-h1 {
+    background-color: #90caf9 !important; /* Blu medio-chiaro per il titolo (blu cielo) */
+    color: #1a237e !important; /* Blu molto scuro per il testo del titolo (blu notte) */
+    text-align: center !important;
+    padding: 15px 30px !important; /* AUMENTATO LEGGERMENTE IL PADDING ORIZZONTALE */
+    margin: 0 !important;
+    border-radius: 12px !important; /* Leggermente meno arrotondato */
+    box-shadow: 0 4px 10px rgba(21, 101, 192, 0.2) !important; /* Ombra più leggera */
+    max-width: 650px !important; /* AUMENTATO LEGGERMENTE IL MAX-WIDTH per dare più "spazio" al box */
+    font-size: 2.2em !important;
+    font-weight: 600 !important;
 }
 
-/* Pulsante disabilitato */
-button.btn:disabled {
-    background-color: #cccccc;
-    color: #666666;
-    cursor: not-allowed;
+/* === Dropdown "Select a sensor" - Centrato e grande (stili desktop di base) === */
+.sensor-dropdown-container {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-bottom: 20px !important; /* Spazio ridotto dopo il dropdown sensore */
+    margin-top: 0px !important; /* Nessun margine superiore, si basa sul margin-bottom di H1 */
+    min-height: 60px !important; /* Leggermente ridotto */
 }
 
-/* Stile per i bottoni con link (renderizzati come <a>) */
-a.btn {
+/* Stilizzazione del dcc.Dropdown per il sensore (classe 'Select' applicata nel dcc.Dropdown) */
+.sensor-dropdown-container .Select {
+    width: 320px !important; /* Larghezza fissa del contenitore, leggermente ridotta */
+    max-width: 90% !important; /* Max larghezza per responsive */
+    height: 45px !important; /* Altezza leggermente ridotta */
+    border: 1px solid #1976d2 !important; /* Bordo blu medio-scuro */
+    border-radius: 0.4rem !important; /* Leggermente meno arrotondato */
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.1), 0 2px 5px rgba(0,0,0,.1) !important;
+    background-color: #ffffff !important; /* Sfondo bianco */
+    position: relative; /* Per posizionamento freccia/contenuto */
+    box-sizing: border-box !important;
+}
+
+/* Stilizzazione del controllo interno del dropdown (il campo visibile) */
+.sensor-dropdown-container .Select-control {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    display: flex !important;
+    align-items: center !important; /* Centra verticalmente */
+    justify-content: space-between !important; /* Spazio tra testo e freccia */
+    padding: 0 8px !important; /* Aggiunge un po' di padding per la freccia */
+}
+
+/* Contenitore del Placeholder/Valore selezionato */
+.sensor-dropdown-container .Select-input, /* Per quando l'input è attivo */
+.sensor-dropdown-container .Select-single-value { /* Per il valore selezionato */
+    display: flex !important;
+    align-items: center !important; /* Centra verticalmente il testo */
+    justify-content: center !important; /* Centra orizzontalmente il testo */
+    flex-grow: 1 !important; /* Occupare tutto lo spazio disponibile */
+    padding: 0 !important; /* Rimuovi padding indesiderati */
+    margin: 0 !important; /* Rimuovi margin indesiderati */
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute !important; /* Permette al testo di sovrapporsi a tutto */
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+}
+
+/* Placeholder del dropdown */
+.sensor-dropdown-container .Select-placeholder {
+    color: #212121 !important;
+    font-size: 1.1em !important; /* Leggermente ridotto */
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important; /* Centra verticalmente */
+    justify-content: center !important; /* Centra orizzontalmente */
+    padding: 0 !important; /* Rimuovi padding aggiuntivi */
+}
+
+/* Testo selezionato del dropdown */
+.sensor-dropdown-container .Select-value-label { /* Per il testo effettivo */
+    color: #0d47a1 !important;
+    font-size: 1.1em !important; /* Leggermente ridotto */
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important; /* Centra verticalmente */
+    justify-content: center !important; /* Centra orizzontalmente */
+    padding: 0 !important; /* Rimuovi padding aggiuntivi */
+}
+
+/* Lista delle opzioni del dropdown */
+.sensor-dropdown-container .Select-menu-outer {
+    border: 1px solid #1976d2 !important;
+    border-radius: 0.4rem !important; /* Leggermente meno arrotondato */
+    box-shadow: 0 2px 5px rgba(0,0,0,.1) !important;
+    background-color: #ffffff !important;
+    z-index: 1000;
+}
+.sensor-dropdown-container .Select-option {
+    color: #0d47a1 !important;
+    font-size: 1em !important; /* Leggermente ridotto */
+    padding: 8px 12px !important; /* Ridotto */
+    text-align: center !important; /* Centra il testo delle singole opzioni */
+}
+.sensor-dropdown-container .Select-option.is-focused {
+    background-color: #e3f2fd !important;
+}
+.sensor-dropdown-container .Select-option.is-selected {
+    background-color: #90caf9 !important;
+    color: #1a237e !important;
+}
+
+/* Freccia del dropdown sensore: USA QUELLA DI DEFAULT */
+.sensor-dropdown-container .Select-arrow-zone {
+    display: flex !important; /* Assicura che la freccia sia visibile */
+    align-items: center !important;
+    justify-content: center !important;
+    padding-right: 5px !important; /* Spazio per la freccia */
+    z-index: 2; /* Assicura che la freccia sia sopra il testo se si sovrappongono */
+}
+.sensor-dropdown-container .Select-arrow {
+    border-color: #1976d2 transparent transparent !important; /* Colore freccia di default */
+    border-width: 6px 6px 0 !important; /* Dimensione freccia di default */
+}
+
+
+/* === REGOLE PER IMPEDIRE LA DIGITAZIONE E MANTENERE I CLIC === */
+
+/* Per tutti gli input testuali all'interno dei dcc.Dropdown */
+.Select-input input[type="text"] {
+    cursor: default !important; /* Non mostrare il cursore di testo */
+    caret-color: transparent !important; /* Nasconde il cursore di testo */
+}
+
+/* Per il dcc.DatePickerSingle - input testuale */
+.DateInput_input {
+    cursor: pointer !important; /* Indica che si può cliccare per aprire il calendario */
+    caret-color: transparent !important; /* Nasconde il cursore di testo */
+    user-select: none !important; /* Impedisce la selezione del testo */
+    pointer-events: auto !important; /* Assicurati che gli eventi del mouse siano attivi */
+    outline: none !important; /* Rimuove il bordo di focus */
+}
+
+
+/* === Contenitore principale per blocchi data === */
+.datetime-sections-wrapper {
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    gap: 10px !important; /* RIDOTTO ULTERIORMENTE: Spazio tra i riquadri Start Date e End Date */
+    flex-wrap: wrap !important;
+    margin-bottom: 20px !important; /* Spazio sotto i riquadri data */
+}
+
+/* === Ogni blocco singolo (start/end) === */
+.datetime-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 15px !important; /* RIDOTTO: Spazio interno tra label, data, ora */
+    padding: 18px !important; /* RIDOTTO: Padding interno del riquadro */
+    background-color: #ffffff !important; /* Sfondo bianco */
+    border: 1px solid #90caf9 !important; /* Bordo blu medio-chiaro */
+    border-radius: 12px !important; /* Leggermente meno arrotondato */
+    box-shadow: 0 4px 10px rgba(21, 101, 192, 0.1) !important; /* Ombra più leggera */
+    box-sizing: border-box !important;
+}
+
+/* Label tipo "Start Date" */
+.date-time-label {
     font-weight: bold !important;
-    font-size: 1.1rem !important;
-    border-radius: 8px !important;
+    color: #0d47a1 !important;
+    font-size: 1.1em !important; /* Leggermente più piccolo */
+    margin-bottom: 2px !important; /* Ridotto */
+}
+
+/* Gruppo input (data, ora, minuti) */
+.date-time-group {
+    display: flex !important;
+    flex-direction: row !important;
+    gap: 15px !important; /* RIDOTTO: Gap tra i campi data, ora, minuti */
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+}
+
+/* === Stili specifici per il DatePickerSingle (DD/MM/YYYY) === */
+/* Questa è la classe principale per il contenitore dell'input data */
+.SingleDatePickerInput {
+    width: 160px !important; /* Larghezza per il testo completo e spazio freccia */
+    min-width: 130px !important;
+    height: 40px !important; /* Altezza */
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.08) !important;
+    background-color: #ffffff !important;
+    border-radius: 0.3rem !important; /* Leggermente meno arrotondato */
+    padding: 0 8px !important; /* Padding laterale ridotto */
+    position: relative !important;
+}
+
+/* Stili specifici per la classe che aggiunge il bordo al DatePicker */
+.SingleDatePickerInput__withBorder {
+    border: 1px solid #1976d2 !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.08) !important;
+    border-radius: 0.3rem !important;
+}
+
+/* Stili per l'input testuale effettivo dentro il DatePicker (dove appare DD/MM/YYYY) */
+.DateInput_input {
+    cursor: pointer !important;
+    caret-color: transparent !important;
+    user-select: none !important;
+    pointer-events: auto !important;
+    outline: none !important;
+    width: 100% !important;
+    text-align: center !important;
+    padding: 0 !important;
+    background-color: transparent !important;
+    border: none !important;
+    margin: 0 !important;
+    font-size: 1em !important; /* Dimensione del font dell'input data */
+}
+
+/* === ICONA FRECCIA per dcc.DatePickerSingle (sostituisce icona calendario) === */
+.SingleDatePickerInput_calendarIcon {
+    display: none !important; /* Nasconde l'icona SVG/Font Awesome di default */
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+}
+
+/* Crea la freccia triangolare usando uno pseudo-elemento sull'input container */
+.SingleDatePickerInput::after {
+    content: ''; /* Obbligatorio per i pseudo-elementi */
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent; /* Leggermente più piccola */
+    border-right: 5px solid transparent; /* Leggermente più piccola */
+    border-top: 5px solid #1976d2; /* Punta in giù */
+    pointer-events: none; /* Il click "passa attraverso" */
+    position: absolute !important;
+    right: 8px !important; /* Distanza dal bordo destro del riquadro */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 3;
+}
+
+/* --- FIX per freccia extra DatePicker --- */
+.SingleDatePicker_picker__directionLeft .DateInput_fang,
+.SingleDatePicker_picker__directionRight .DateInput_fang,
+.SingleDatePicker_picker__directionUp .DateInput_fang,
+.SingleDatePicker_picker__directionDown .DateInput_fang,
+.DateInput_arrow, /* Aggiunto o rafforzato per targettizzare altre frecce */
+.DayPicker_transitionContainer .SingleDatePickerInput__clearDate {
+    display: none !important;
+}
+
+
+/* === Stili per i dcc.Dropdown di ora/minuti (che usano uniform-input) === */
+.uniform-input {
+    width: 90px !important; /* Larghezza per dare spazio al testo e freccia */
+    min-width: 80px !important; /* Larghezza minima adattata */
+    height: 40px !important; /* Altezza */
+    box-sizing: border-box !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border: 1px solid #1976d2 !important;
+    border-radius: 0.3rem !important;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,.08) !important;
+    background-color: #ffffff !important;
+    padding: 0 !important;
+}
+
+.uniform-input .Select-control {
+    width: 100% !important;
+    height: 100% !important;
+    border: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 5px !important;
+}
+
+/* Contenitore del Placeholder/Valore selezionato per Hour/Min */
+.uniform-input .Select-placeholder,
+.uniform-input .Select-single-value {
+    color: #212121 !important;
+    font-size: 0.95rem !important; /* Font per ora/minuti */
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 12px 0 0 !important; /* Padding a destra del TESTO */
+    margin: 0 !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+}
+
+.uniform-input .Select-value-label {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+.uniform-input .Select-arrow-zone {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding-right: 5px !important;
+    z-index: 2;
+    padding-left: 0 !important;
+}
+.uniform-input .Select-arrow {
+    border-color: #1976d2 transparent transparent !important;
+    border-width: 5px 5px 0 !important; /* Dimensione freccia */
+}
+
+
+/* === Nasconde elementi indesiderati del datepicker (se non li vogliamo) === */
+.SingleDatePicker .DateInput_fang,
+.SingleDatePickerInput__showClearDate {
+    display: none !important;
+}
+
+/* === Contenitore per entrambi i bottoni "Generate Graph" e "Back to Home" === */
+#buttons-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 25px !important;
+    gap: 20px !important;
+    flex-wrap: wrap !important;
+}
+
+/* === Stile BASE COMUNE per entrambi i bottoni === */
+.common-button-style {
+    font-weight: bold !important;
     padding: 10px 20px !important;
-    margin: 5px !important;
-    color: white !important;
-    background-color: #6688cc !important;
-    border-color: #334477 !important;
-    text-decoration: none !important; /* Rimuove la sottolineatura */
-    transition: background-color 0.3s ease !important;
-}
-
-/* Hover effetto per i bottoni con link */
-a.btn:hover {
-    background-color: #5566aa !important;
+    border-radius: 7px !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease !important;
     color: #ffffff !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
 }
 
+/* === Stili SPECIFICI per il pulsante "Generate Graph" (dbc-button.btn-primary) === */
+.dbc-button.btn-primary,
+.dbc-button.btn-primary.btn {
+    font-weight: bold !important;
+    padding: 10px 20px !important;
+    border-radius: 7px !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease !important;
+    color: #ffffff !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    width: 180px !important;
+    height: 45px !important;
+    background-color: #007bff !important;
+    border-color: #007bff !important;
+}
+
+.dbc-button.btn-primary:hover,
+.dbc-button.btn-primary.btn:hover {
+    background-color: #0056b3 !important;
+    border-color: #0056b3 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* === Stili SPECIFICI per il link "Back to Home" (#back-to-home-link) === */
+#back-to-home-link {
+    font-weight: bold !important;
+    padding: 10px 20px !important;
+    border-radius: 7px !important;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2) !important;
+    transition: background-color 0.3s ease, transform 0.2s ease, border-color 0.3s ease !important;
+    color: #ffffff !important;
+    font-size: 1em !important;
+    text-align: center !important;
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+    width: 180px !important;
+    height: 45px !important;
+    background-color: #424242 !important;
+    border-color: #424242 !important;
+}
+
+#back-to-home-link:hover {
+    background-color: #212121 !important;
+    border-color: #212121 !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+
+/* === Messaggio di errore "Please select a sensor." === */
+.error-message {
+    color: #c62828 !important;
+    font-size: 1em !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}
+
+@media (max-width: 992px) {
+    #h1-title-wrapper h1.my-custom-h1 {
+        font-size: 1.8em !important;
+        padding: 15px !important;
+        max-width: 90% !important;
+    }
+
+    .sensor-dropdown-container {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+
+    .sensor-dropdown-container > div.Select.Select--single.is-searchable {
+        width: 100% !important;
+        max-width: 220px !important;
+        min-width: 220px !important;
+        box-sizing: border-box !important;
+        height: 42px !important;
+    }
+
+    .sensor-dropdown-container > div.Select.Select--single.is-searchable .Select-control {
+        width: 100% !important;
+        height: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .sensor-dropdown-container .Select-placeholder,
+    .sensor-dropdown-container .Select-value-label {
+        font-size: 1.1em !important;
+    }
+
+    .datetime-sections-wrapper {
+        flex-direction: column !important;
+        gap: 15px !important;
+        align-items: center !important;
+    }
+
+    .datetime-container {
+        width: 90% !important;
+        max-width: 350px !important;
+        padding: 15px !important;
+    }
+
+    .date-time-group {
+        flex-direction: column !important;
+        gap: 10px !important;
+    }
+
+    .SingleDatePickerInput,
+    .uniform-input {
+        width: 100% !important;
+        max-width: 220px !important;
+        min-width: 220px !important;
+        height: 42px !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+    }
+
+    .SingleDatePickerInput::after,
+    .uniform-input .Select-arrow {
+        border-width: 5px 5px 0 !important;
+    }
+
+    #buttons-container {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .dbc-button.btn-primary,
+    #back-to-home-link {
+        width: 90% !important;
+        max-width: 300px !important;
+        height: 45px !important;
+        margin: 0 auto !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand {
+        font-size: 1.2em !important;
+    }
+
+    #h1-title-wrapper h1.my-custom-h1 {
+        font-size: 1.4em !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+    }
+
+    .sensor-dropdown-container {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .sensor-dropdown-container > div.Select.Select--single.is-searchable {
+        width: 100% !important;
+        max-width: 200px !important;
+        min-width: 200px !important;
+        height: 40px !important;
+        box-sizing: border-box !important;
+    }
+
+    .sensor-dropdown-container > div.Select.Select--single.is-searchable .Select-control {
+        width: 100% !important;
+        height: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .sensor-dropdown-container .Select-placeholder,
+    .sensor-dropdown-container .Select-value-label {
+        font-size: 1.1em !important;
+    }
+
+    .datetime-container {
+        padding: 12px !important;
+    }
+
+    .date-time-label {
+        font-size: 0.9em !important;
+    }
+
+    .SingleDatePickerInput,
+    .uniform-input {
+        height: 40px !important;
+        font-size: 0.95em !important;
+        max-width: 200px !important;
+        min-width: 200px !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+    }
+}

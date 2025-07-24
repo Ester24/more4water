@@ -25,12 +25,12 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 14/07/2025 | 14:10 - 18:10 | X ore | Implementazione lettura CSV | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Design database SQLite | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Creazione prime pagine GUI | |
+| 14/07/2025 | 14:10 - 18:10 | 4 ore | Implementazione lettura CSV | |
+| DD/MM/YYYY | 10:30 - 15:30 | 5 ore | Design database SQLite | |
+| DD/MM/YYYY | 14:00 - 18:00 | 4 ore | Creazione prime pagine GUI | |
 | | | | | |
 
-**Totale Settimana**: X ore
+**Totale Settimana**: 13 ore
 
 ### Settimana 3
 
