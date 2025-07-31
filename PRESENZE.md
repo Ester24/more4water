@@ -36,23 +36,20 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Sistema autenticazione utenti | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Form segnalazione guasti | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Testing e debugging | |
+| 24/07/2025 | 11:00 - 17:00 | 6 ore | Sistema autenticazione utenti | |
 | | | | | |
 
-**Totale Settimana**: X ore
+**Totale Settimana**: 6 ore
 
 ### Settimana 4
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Integrazione API ThingSpeak | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Grafici live in tempo reale | |
-| DD/MM/YYYY | HH:MM - HH:MM | X ore | Ottimizzazioni e miglioramenti | |
+| 31/07/2025 | 10:30 - 16:30 | 6 ore | Integrazione API ThingSpeak | |
+
 | | | | | |
 
-**Totale Settimana**: X ore
+**Totale Settimana**: 6 ore
 
 ---
 

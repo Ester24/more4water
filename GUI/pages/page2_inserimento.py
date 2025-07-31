@@ -19,21 +19,20 @@ sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
 
 minuti_options = [{'label': '00', 'value': 0}, {'label': '30', 'value': 30}]
 
-# --- INIZIO DEL LAYOUT CORRETTO E AGGIORNATO ---
 layout = html.Div(style={'padding': '20px'}, children=[
     html.Div(
         html.H1("Select Date and Sensor", className="my-custom-h1"),
         id="h1-title-wrapper"
     ),
 
-    html.Div(className='sensor-dropdown-container', children=[
+    html.Div(className='sensor-dropdown-container custom-sensor-dropdown', children=[
         dcc.Dropdown(
             id='sensore-dropdown',
-            options=[{'label': s, 'value': s} for s in sensori],
+            options=[{'label': f"Sensor {i+1}", 'value': s} for i, s in enumerate(sensori)],
             placeholder="Select a sensor",
-            className='Select', # Manteniamo 'Select' per il CSS specifico del sensore
-            searchable=False,   # <--- ESSENZIALE: Disabilita la ricerca testuale
-            clearable=False     # <--- OPZIONALE: Impedisce di deselezionare
+            className='Select my-sensor-specific-style',
+            searchable=False,
+            clearable=False
         )
     ]),
 
@@ -48,23 +47,22 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
-                    
                 ),
                 dcc.Dropdown(
                     id='start-hour',
                     options=[{'label': f"{h:02d}", 'value': h} for h in range(24)],
                     placeholder="Hour",
-                    className='uniform-input', # Mantenuto per coerenza CSS
-                    searchable=False, # <--- ESSENZIALE per i dropdown di ore/minuti
-                    clearable=False   # <--- OPZIONALE
+                    className='uniform-input',
+                    searchable=False,
+                    clearable=False
                 ),
                 dcc.Dropdown(
                     id='start-minute',
                     options=minuti_options,
                     placeholder="Min",
-                    className='uniform-input', # Mantenuto per coerenza CSS
-                    searchable=False, # <--- ESSENZIALE per i dropdown di ore/minuti
-                    clearable=False   # <--- OPZIONALE
+                    className='uniform-input',
+                    searchable=False,
+                    clearable=False
                 )
             ])
         ]),
@@ -78,23 +76,22 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
-                    
                 ),
                 dcc.Dropdown(
                     id='end-hour',
                     options=[{'label': f"{h:02d}", 'value': h} for h in range(24)],
                     placeholder="Hour",
                     className='uniform-input',
-                    searchable=False, # <--- ESSENZIALE per i dropdown di ore/minuti
-                    clearable=False   # <--- OPZIONALE
+                    searchable=False,
+                    clearable=False
                 ),
                 dcc.Dropdown(
                     id='end-minute',
                     options=minuti_options,
                     placeholder="Min",
                     className='uniform-input',
-                    searchable=False, # <--- ESSENZIALE per i dropdown di ore/minuti
-                    clearable=False   # <--- OPZIONALE
+                    searchable=False,
+                    clearable=False
                 )
             ])
         ])
@@ -126,8 +123,7 @@ layout = html.Div(style={'padding': '20px'}, children=[
     Input('end-minute', 'value'),
 )
 def genera_link(sensore, sd, sh, sm, ed, eh, em):
-    # Inizialmente non c'è link e non c'è errore
-    link_output = None # o html.Div()
+    link_output = None
     error_message = ""
 
     if not sensore:
@@ -147,7 +143,6 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
         start_dt = datetime.strptime(sd, '%Y-%m-%d').replace(hour=sh, minute=sm)
         end_dt = datetime.strptime(ed, '%Y-%m-%d').replace(hour=eh, minute=em)
     except Exception as e:
-        # Stampa l'errore per il debug nel terminale del server
         print(f"Error parsing date/time: {e}")
         error_message = "Invalid date or time format. Please check your selections."
         return link_output, error_message
@@ -156,7 +151,6 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
         error_message = "Error: start date/time must be before or equal to end date/time."
         return link_output, error_message
 
-    # Se tutti i controlli passano, crea il link
     query = f"?sensore={sensore}&sd={sd}&sh={sh}&sm={sm}&ed={ed}&eh={eh}&em={em}"
     link_output = dcc.Link("Generate Graph", href=f"/grafici{query}", style={
         'fontSize': '20px', 'fontWeight': 'bold', 'textDecoration': 'none', 'color': 'white',

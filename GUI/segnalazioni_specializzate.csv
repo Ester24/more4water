@@ -1,0 +1,2 @@
+id,timestamp,user_id,sensor_id,issue_type,description,priority
+1,2025-07-31 12:27:36,,field2,low_battery,yyyy,1

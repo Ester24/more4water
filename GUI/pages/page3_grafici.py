@@ -20,13 +20,13 @@ df['created_at'] = df['created_at'].dt.tz_localize(None)
 
 # Dizionario per mappare nomi sensori più leggibili
 sensor_labels = {
-    'field1': 'Sconosciuto',
-    'field2': 'Sconosciuto',
-    'field3': 'Sconosciuto',
-    'field4': 'Sconosciuto',
-    'field5': 'Sconosciuto',
-    'field6': 'Sconosciuto',
-    'field7': 'Temperature',
+    'field1': 'Sensor 1',
+    'field2': 'Sensor 2',
+    'field3': 'Sensor 3',
+    'field4': 'Sensor 4',
+    'field5': 'Sensor 5',
+    'field6': 'Sensor 6',
+    'field7': 'Sensor 7',
 }
 
 layout = html.Div([
@@ -34,11 +34,16 @@ layout = html.Div([
 
     dcc.Graph(
         id='sensore-graph',
+        # Aggiunta la configurazione responsive: True
+        config={
+            'responsive': True,
+            'displayModeBar': False # Nasconde la barra degli strumenti di Plotly
+        },
         style={
-            'width': '100%',
-            'height': '400px',
-            'maxWidth': '1000px',
-            'margin': '0 auto'
+            'width': '100%', # Il grafico occupa il 100% della larghezza disponibile
+            'height': '400px', # Altezza fissa del grafico (puoi regolarla se necessario)
+            'maxWidth': '1000px', # Larghezza massima per schermi grandi
+            'margin': '0 auto' # Centra il grafico orizzontalmente
         }
     ),
 
@@ -52,12 +57,12 @@ layout = html.Div([
 
     dcc.Location(id='url', refresh=False)
 ], style={
-    'width': '1000px',
-    'height': '600px',
+    'width': '100%', # L'intero layout occupa il 100% della larghezza della viewport
+    'height': 'auto', # L'altezza si adatta al contenuto
     'margin': '0 auto',
     'padding': '0',
     'boxSizing': 'border-box',
-    'overflow': 'hidden',
+    # 'overflow': 'hidden', # Rimosso o commentato per evitare problemi di scroll su mobile
     'display': 'flex',
     'flexDirection': 'column',
     'justifyContent': 'flex-start',
@@ -128,15 +133,19 @@ def mostra_grafico(query_string):
         title=f'Time Series - {label_sensore}',
         xaxis_title='Date',
         yaxis_title='Values',
-        template='plotly_white'
+        template='plotly_white',
+        # Margini ottimizzati per schermi più piccoli
+        margin=dict(l=20, r=20, t=50, b=20),
+        # Dimensioni font per il titolo e gli assi
+        title_font_size=20,
+        xaxis=dict(title_font_size=14, tickfont_size=10),
+        yaxis=dict(title_font_size=14, tickfont_size=10)
     )
 
     fig.update_xaxes(
-        tickformat='%d %b %y',  # ← ad esempio: 15 Jul 25
+        tickformat='%d %b %y',
         tickangle=0
     )
-
-
 
     intervallo_testo = f"Intervallo selezionato: {start_dt.strftime('%d/%m/%Y %H:%M')} → {end_dt.strftime('%d/%m/%Y %H:%M')}"
     return fig, "", intervallo_testo

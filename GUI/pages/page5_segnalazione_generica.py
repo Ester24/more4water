@@ -36,16 +36,16 @@ layout = dbc.Container([
         ], className="mb-3"), # Margine inferiore per la riga nome/cognome
 
         dbc.Label("Region", html_for="region", className="mt-3"),
-        dbc.Input(id="region", type="text", placeholder="e.g., Umbria"),
+        dbc.Input(id="region", type="text", placeholder="Umbria"),
 
         dbc.Label("Province", html_for="province", className="mt-3"),
-        dbc.Input(id="province", type="text", placeholder="e.g., Perugia"),
+        dbc.Input(id="province", type="text", placeholder="Perugia"),
 
         dbc.Label("City", html_for="city", className="mt-3"),
-        dbc.Input(id="city", type="text", placeholder="e.g., Assisi"),
+        dbc.Input(id="city", type="text", placeholder="Assisi"),
 
         dbc.Label("Address", html_for="address", className="mt-3"),
-        dbc.Input(id="address", type="text", placeholder="e.g., Via Roma, 10"),
+        dbc.Input(id="address", type="text", placeholder="Via Roma, 10"),
 
         dbc.Label("Problem Description", html_for="problem_description", className="mt-3"),
         dbc.Textarea(id="problem_description", placeholder="Describe the problem here...", rows=5),
