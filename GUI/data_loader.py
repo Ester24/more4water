@@ -1,17 +1,22 @@
-import pandas as pd
-from io import StringIO
+import csv
+from datetime import datetime
 import os
+from io import StringIO
+import math # Importiamo la libreria math per il troncamento
 
-def ripulisci_csv(percorso_origine, percorso_destinazione):
+def carica_df_sanitizzato(percorso_csv):
     """
-    Legge un file CSV, rimuove le virgolette esterne non necessarie e
-    sostituisce le doppie virgolette interne con singole.
-    Salva il risultato in un nuovo file pulito.
+    Legge, pulisce e parsa il file CSV usando solo librerie standard di Python.
+    Restituisce una lista di dizionari con date senza fuso orario.
     """
     try:
-        with open(percorso_origine, 'r', encoding='utf-8') as infile:
-            lines = infile.readlines()
+        if not os.path.exists(percorso_csv):
+            print(f"File non trovato: {percorso_csv}")
+            return []
 
+        with open(percorso_csv, 'r', encoding='utf-8', newline='') as infile:
+            lines = infile.readlines()
+        
         righe_pulite = []
         for line in lines:
             line = line.strip()
@@ -19,60 +24,55 @@ def ripulisci_csv(percorso_origine, percorso_destinazione):
                 line = line[1:-1]
             line = line.replace('""', '"')
             righe_pulite.append(line)
-
-        with open(percorso_destinazione, 'w', encoding='utf-8') as outfile:
-            outfile.write('\n'.join(righe_pulite))
-        return True
-
-    except Exception:
-        return False
-
-
-def carica_df_sanitizzato(percorso_csv):
-    """
-    Pulisce il file CSV e poi lo carica in un DataFrame pandas.
-    """
-    try:
-        if not os.path.exists(percorso_csv):
-            return pd.DataFrame()
-
-        percorso_pulito = percorso_csv.replace('.csv', '_pulito.csv')
         
-        if not ripulisci_csv(percorso_csv, percorso_pulito):
-            return pd.DataFrame()
+        cleaned_data_io = StringIO('\n'.join(righe_pulite))
+        reader = csv.reader(cleaned_data_io, delimiter=',', quotechar='"')
+        dati_letti = list(reader)
 
-        df = pd.read_csv(
-            percorso_pulito,
-            sep=",",
-            quotechar='"',
-            engine='python',
-            skipinitialspace=True
-        )
+        if not dati_letti:
+            return []
 
-        os.remove(percorso_pulito)
+        header = [col.strip() for col in dati_letti[0]]
+        
+        dati_sensori = []
+        
+        for riga in dati_letti[1:]:
+            dizionario_riga = {}
+            for i, col_name in enumerate(header):
+                valore_stringa = riga[i]
+                
+                try:
+                    if col_name == 'created_at':
+                        dt_object = datetime.fromisoformat(valore_stringa)
+                        dizionario_riga[col_name] = dt_object.replace(tzinfo=None)
+                    elif col_name.startswith('field') and col_name[5:].isdigit():
+                        valore_float = float(valore_stringa)
+                        # NUOVA MODIFICA: Troncamento alla seconda cifra decimale
+                        valore_troncato = math.trunc(valore_float * 100) / 100.0
+                        dizionario_riga[col_name] = valore_troncato
+                    else:
+                        dizionario_riga[col_name] = valore_stringa
+                except (ValueError, IndexError):
+                    dizionario_riga[col_name] = None
 
-        df.columns = df.columns.str.strip()
+            dati_sensori.append(dizionario_riga)
             
-        if 'created_at' not in df.columns:
-            return pd.DataFrame()
+            # Qui il debug per la riga problematica del 7 giugno
+            if dizionario_riga.get('created_at') and dizionario_riga['created_at'].isoformat().startswith('2025-06-07T00:00:00'):
+                print("\n--- DEBUG AGGRESSIVO: Traccia la riga problematica ---")
+                print("Dizionario riga del 7 giugno:", dizionario_riga)
+                valore_field7_debug = dizionario_riga.get('field7')
+                print(f"Valore di field7 dopo il troncamento: {valore_field7_debug}")
+                print("--- FINE DEBUG AGGRESSIVO ---\n")
+                
+                # Ora la verifica è sul valore troncato
+                if valore_field7_debug == 22.99:
+                    print("SUCCESS: Il valore è corretto!")
+                else:
+                    print("ERRORE CRITICO: Il valore è ancora errato.")
 
-        df['created_at'] = pd.to_datetime(df['created_at'], format="%Y-%m-%dT%H:%M:%S%z", errors='coerce')
-        df.dropna(subset=['created_at'], inplace=True)
+        return dati_sensori
 
-        if df.empty:
-            return df
-
-        if df['created_at'].dt.tz is not None:
-             df['created_at'] = df['created_at'].dt.tz_convert('UTC').dt.tz_localize(None)
-
-        sensor_cols = [col for col in df.columns if col.startswith('field') and col[5:].isdigit()]
-        for col in sensor_cols:
-            df[col] = pd.to_numeric(df[col], errors='coerce')
-        
-        return df
-
-    except FileNotFoundError:
-        return pd.DataFrame()
-    except Exception:
-        return pd.DataFrame()
-        
+    except Exception as e:
+        print(f"Si è verificato un errore in carica_df_sanitizzato: {e}")
+        return []

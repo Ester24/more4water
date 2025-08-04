@@ -10,14 +10,12 @@ from data_loader import carica_df_sanitizzato
 # Registra la pagina Dash con path e titolo
 dash.register_page(__name__, path='/grafici', title='View Charts')
 
-# Percorso al CSV
+# Percorso alla cartella principale del progetto
 current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-#csv_path = os.path.join(project_root, 'feeds.csv')
-csv_path = os.path.join(project_root, 'm4w_Villaverla.csv')
 
-# Caricamento dati
-df = carica_df_sanitizzato(csv_path)
+# --- RIMOZIONE: Il DataFrame non viene più caricato all'avvio ---
+# Il caricamento verrà fatto all'interno della callback.
 
 # Dizionario per mappare nomi sensori più leggibili
 sensor_labels = {
@@ -76,7 +74,17 @@ def mostra_grafico(query_string):
         return go.Figure(), "Nessun parametro di ricerca trovato. Torna alla pagina di selezione per inserire i dati.", "", ""
 
     params = parse.parse_qs(query_string[1:])
-
+    
+    file_selezionato = params.get('file', [None])[0]
+    if not file_selezionato:
+        return go.Figure(), "Errore: nome del file non specificato nella query.", "", ""
+    
+    csv_path = os.path.join(project_root, file_selezionato)
+    
+    # --- MODIFICA QUI: Convertiamo la lista in un DataFrame ---
+    dati_sensori = carica_df_sanitizzato(csv_path)
+    df = pd.DataFrame(dati_sensori)
+    
     sensore = params.get('sensore', [None])[0]
     sd = params.get('sd', [None])[0]
     ed = params.get('ed', [None])[0]
@@ -85,9 +93,9 @@ def mostra_grafico(query_string):
     eh = int(params.get('eh', ['23'])[0])
     em = int(params.get('em', ['59'])[0])
 
-    if not sensore or sensore not in df.columns or df.empty:
-        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido o il dataset è vuoto.", "", ""
-
+    if not sensore or not df.columns.isin([sensore]).any() or df.empty:
+        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido o il dataset è vuoto per il file '{file_selezionato}'.", "", ""
+    
     try:
         start_dt = datetime.strptime(f"{sd} {sh}:{sm}", "%Y-%m-%d %H:%M")
         end_dt = datetime.strptime(f"{ed} {eh}:{em}", "%Y-%m-%d %H:%M")
