@@ -51,6 +51,16 @@
 
 **Totale Settimana**: 6 ore
 
+### Settimana 5
+
+| Data | Orario | Durata | Attività Svolta | Note |
+|------|--------|--------|----------------|------|
+| 04/08/2025 | 10:30 - 16:30 | 6 ore | Risolti problemi con lettura secondo file CSV | |
+
+| | | | | |
+
+**Totale Settimana**: 6 ore
+
 ---
 
 ## 🎯 Milestone Raggiunte
