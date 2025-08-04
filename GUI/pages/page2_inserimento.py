@@ -8,19 +8,32 @@ from data_loader import carica_df_sanitizzato
 
 dash.register_page(__name__, path='/inserimento', title='Seleziona dati')
 
-from data_loader import carica_df_sanitizzato 
-
 # Percorso al CSV
 current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-csv_path = os.path.join(project_root, 'feeds.csv')
+#csv_path = os.path.join(project_root, 'feeds.csv')
+csv_path = os.path.join(project_root, 'm4w_Villaverla.csv')
 
 # Caricamento dati
-df = carica_df_sanitizzato(csv_path)
+try:
+    df = carica_df_sanitizzato(csv_path)
 
-sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
+    if df.empty:
+        df_min_date = date(2020, 1, 1)
+        df_max_date = date.today()
+        sensori = []
+    else:
+        df_min_date = df['created_at'].min().date()
+        df_max_date = df['created_at'].max().date()
+        sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
+
+except FileNotFoundError:
+    df = pd.DataFrame()
+    df_min_date = date(2020, 1, 1)
+    df_max_date = date.today()
+    sensori = []
+
 minuti_options = [{'label': '00', 'value': 0}, {'label': '30', 'value': 30}]
-# --- Fine sezione di caricamento dati ---
 
 # --- LAYOUT COMPLETO ---
 layout = html.Div(style={'padding': '20px'}, children=[
@@ -46,9 +59,9 @@ layout = html.Div(style={'padding': '20px'}, children=[
                 dcc.DatePickerSingle(
                     id='start-date',
                     placeholder="DD/MM/YYYY",
-                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020, 1, 1),
-                    max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
-                    initial_visible_month=datetime.now().date(),  # Modifica qui
+                    min_date_allowed=df_min_date,
+                    max_date_allowed=df_max_date,
+                    initial_visible_month=datetime.now().date(),
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
                 ),
@@ -58,7 +71,8 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     placeholder="Hour",
                     className='uniform-input',
                     searchable=False,
-                    clearable=False
+                    clearable=False,
+                    value=0
                 ),
                 dcc.Dropdown(
                     id='start-minute',
@@ -66,7 +80,8 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     placeholder="Min",
                     className='uniform-input',
                     searchable=False,
-                    clearable=False
+                    clearable=False,
+                    value=0
                 )
             ])
         ]),
@@ -76,9 +91,9 @@ layout = html.Div(style={'padding': '20px'}, children=[
                 dcc.DatePickerSingle(
                     id='end-date',
                     placeholder="DD/MM/YYYY",
-                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020, 1, 1),
-                    max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
-                    initial_visible_month=datetime.now().date(),  # Modifica qui
+                    min_date_allowed=df_min_date,
+                    max_date_allowed=df_max_date,
+                    initial_visible_month=datetime.now().date(),
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
                 ),
@@ -88,7 +103,8 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     placeholder="Hour",
                     className='uniform-input',
                     searchable=False,
-                    clearable=False
+                    clearable=False,
+                    value=23
                 ),
                 dcc.Dropdown(
                     id='end-minute',
@@ -96,7 +112,8 @@ layout = html.Div(style={'padding': '20px'}, children=[
                     placeholder="Min",
                     className='uniform-input',
                     searchable=False,
-                    clearable=False
+                    clearable=False,
+                    value=30
                 )
             ])
         ])
@@ -137,12 +154,12 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
         error_message = "Please select a sensor and both start and end dates."
         return link_output, error_message
 
+    sh = sh if sh is not None else 0
+    sm = sm if sm is not None else 0
+    eh = eh if eh is not None else 23
+    em = em if em is not None else 30
+
     try:
-        sh = int(sh) if sh is not None else 0
-        sm = int(sm) if sm is not None else 0
-        eh = int(eh) if eh is not None else 23
-        em = int(em) if em is not None else 59
-        
         start_dt = datetime.strptime(sd, '%Y-%m-%d').replace(hour=sh, minute=sm)
         end_dt = datetime.strptime(ed, '%Y-%m-%d').replace(hour=eh, minute=em)
     except Exception:
@@ -154,6 +171,9 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
         return link_output, error_message
 
     query = f"?sensore={sensore}&sd={sd}&sh={sh}&sm={sm}&ed={ed}&eh={eh}&em={em}"
-    link_output = dcc.Link("Generate Graph", href=f"/grafici{query}", className="btn btn-primary")
+    link_output = dcc.Link(
+        dbc.Button("Generate Graph", color="success", className="me-1"),
+        href=f"/grafici{query}"
+    )
 
     return link_output, error_message
