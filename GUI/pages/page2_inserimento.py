@@ -4,26 +4,29 @@ from datetime import datetime, date
 import pandas as pd
 import os
 import dash_bootstrap_components as dbc
+from data_loader import carica_df_sanitizzato
 
 dash.register_page(__name__, path='/inserimento', title='Seleziona dati')
 
-# Carica dati
+from data_loader import carica_df_sanitizzato 
+
+# Percorso al CSV
 current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 csv_path = os.path.join(project_root, 'feeds.csv')
 
-df = pd.read_csv(csv_path, parse_dates=['created_at'])
-df['created_at'] = df['created_at'].dt.tz_localize(None)
+# Caricamento dati
+df = carica_df_sanitizzato(csv_path)
 
 sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
-
 minuti_options = [{'label': '00', 'value': 0}, {'label': '30', 'value': 30}]
+# --- Fine sezione di caricamento dati ---
 
+# --- LAYOUT COMPLETO ---
 layout = html.Div(style={'padding': '20px'}, children=[
-    html.Div(
+    html.Div([
         html.H1("Select Date and Sensor", className="my-custom-h1"),
-        id="h1-title-wrapper"
-    ),
+    ], style={'textAlign': 'center', 'marginTop': '20px'}),
 
     html.Div(className='sensor-dropdown-container custom-sensor-dropdown', children=[
         dcc.Dropdown(
@@ -43,8 +46,9 @@ layout = html.Div(style={'padding': '20px'}, children=[
                 dcc.DatePickerSingle(
                     id='start-date',
                     placeholder="DD/MM/YYYY",
-                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020,1,1),
+                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020, 1, 1),
                     max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
+                    initial_visible_month=datetime.now().date(),  # Modifica qui
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
                 ),
@@ -72,8 +76,9 @@ layout = html.Div(style={'padding': '20px'}, children=[
                 dcc.DatePickerSingle(
                     id='end-date',
                     placeholder="DD/MM/YYYY",
-                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020,1,1),
+                    min_date_allowed=df['created_at'].min().date() if not df.empty else date(2020, 1, 1),
                     max_date_allowed=df['created_at'].max().date() if not df.empty else date.today(),
+                    initial_visible_month=datetime.now().date(),  # Modifica qui
                     display_format='DD/MM/YYYY',
                     className='SingleDatePickerInput',
                 ),
@@ -110,7 +115,9 @@ layout = html.Div(style={'padding': '20px'}, children=[
         'marginTop': '20px'
     }),
 ])
+# --- FINE LAYOUT ---
 
+# --- CALLBACK PER GENERARE IL LINK ---
 @dash.callback(
     Output('link-container', 'children'),
     Output('selection-error-message', 'children'),
@@ -126,24 +133,19 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
     link_output = None
     error_message = ""
 
-    if not sensore:
-        error_message = "Please select a sensor."
+    if not sensore or not sd or not ed:
+        error_message = "Please select a sensor and both start and end dates."
         return link_output, error_message
-
-    if not sd or not ed:
-        error_message = "Specify start and end dates."
-        return link_output, error_message
-
-    sh = sh if sh is not None else 0
-    sm = sm if sm is not None else 0
-    eh = eh if eh is not None else 0
-    em = em if em is not None else 0
 
     try:
+        sh = int(sh) if sh is not None else 0
+        sm = int(sm) if sm is not None else 0
+        eh = int(eh) if eh is not None else 23
+        em = int(em) if em is not None else 59
+        
         start_dt = datetime.strptime(sd, '%Y-%m-%d').replace(hour=sh, minute=sm)
         end_dt = datetime.strptime(ed, '%Y-%m-%d').replace(hour=eh, minute=em)
-    except Exception as e:
-        print(f"Error parsing date/time: {e}")
+    except Exception:
         error_message = "Invalid date or time format. Please check your selections."
         return link_output, error_message
 
@@ -152,11 +154,6 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em):
         return link_output, error_message
 
     query = f"?sensore={sensore}&sd={sd}&sh={sh}&sm={sm}&ed={ed}&eh={eh}&em={em}"
-    link_output = dcc.Link("Generate Graph", href=f"/grafici{query}", style={
-        'fontSize': '20px', 'fontWeight': 'bold', 'textDecoration': 'none', 'color': 'white',
-        'backgroundColor': '#007bff', 'padding': '10px 20px', 'borderRadius': '5px'
-    })
+    link_output = dcc.Link("Generate Graph", href=f"/grafici{query}", className="btn btn-primary")
 
     return link_output, error_message
-
-

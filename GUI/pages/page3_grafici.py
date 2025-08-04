@@ -3,20 +3,21 @@ from dash import dcc, html, Input, Output
 from urllib import parse
 import pandas as pd
 import plotly.graph_objs as go
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
+from data_loader import carica_df_sanitizzato
+
 
 # Registra la pagina Dash con path e titolo
 dash.register_page(__name__, path='/grafici', title='View Charts')
 
-# Percorso assoluto del file CSV
+# Percorso al CSV
 current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 csv_path = os.path.join(project_root, 'feeds.csv')
 
-# Carica il dataset
-df = pd.read_csv(csv_path, parse_dates=['created_at'])
-df['created_at'] = df['created_at'].dt.tz_localize(None)
+# Caricamento dati
+df = carica_df_sanitizzato(csv_path)
 
 # Dizionario per mappare nomi sensori più leggibili
 sensor_labels = {
@@ -31,44 +32,37 @@ sensor_labels = {
 
 layout = html.Div([
     html.H2(),
-
     dcc.Graph(
         id='sensore-graph',
-        # Aggiunta la configurazione responsive: True
         config={
             'responsive': True,
-            'displayModeBar': False # Nasconde la barra degli strumenti di Plotly
+            'displayModeBar': False
         },
         style={
-            'width': '100%', # Il grafico occupa il 100% della larghezza disponibile
-            'height': '400px', # Altezza fissa del grafico (puoi regolarla se necessario)
-            'maxWidth': '1000px', # Larghezza massima per schermi grandi
-            'margin': '0 auto' # Centra il grafico orizzontalmente
+            'width': '100%',
+            'height': '400px',
+            'maxWidth': '1000px',
+            'margin': '0 auto'
         }
     ),
-
     html.Div(id='error-message', style={'color': 'red', 'textAlign': 'center', 'marginTop': '10px'}),
     html.Div(id='selected-dates', style={'textAlign': 'center', 'marginTop': '10px', 'fontWeight': 'bold'}),
-
     html.Div(
         dcc.Link("Back to selection", href="/inserimento", className="btn btn-secondary"),
         style={'textAlign': 'center', 'marginTop': '20px'}
     ),
-
     dcc.Location(id='url', refresh=False)
 ], style={
-    'width': '100%', # L'intero layout occupa il 100% della larghezza della viewport
-    'height': 'auto', # L'altezza si adatta al contenuto
+    'width': '100%',
+    'height': 'auto',
     'margin': '0 auto',
     'padding': '0',
     'boxSizing': 'border-box',
-    # 'overflow': 'hidden', # Rimosso o commentato per evitare problemi di scroll su mobile
     'display': 'flex',
     'flexDirection': 'column',
     'justifyContent': 'flex-start',
     'backgroundColor': 'transparent',
 })
-
 
 @dash.callback(
     Output('sensore-graph', 'figure'),
@@ -77,9 +71,17 @@ layout = html.Div([
     Input('url', 'search')
 )
 def mostra_grafico(query_string):
-    # Parsing parametri URL
     params = parse.parse_qs(query_string[1:])
+    
+    # Pulizia avanzata del valore del sensore estratto dalla query string
     sensore = params.get('sensore', [None])[0]
+    if isinstance(sensore, str):
+        # Normalizza la stringa per rimuovere caratteri di codifica non standard
+        sensore = sensore.strip().encode('utf-8').decode('utf-8', 'ignore')
+
+    # DEBUG: Stampa il valore pulito del sensore per diagnostica
+    print(f"DEBUG: Sensore estratto dalla query string e pulito: '{sensore}'")
+
     sd = params.get('sd', [None])[0]
     ed = params.get('ed', [None])[0]
     sh = params.get('sh', [None])[0]
@@ -87,16 +89,16 @@ def mostra_grafico(query_string):
     eh = params.get('eh', [None])[0]
     em = params.get('em', [None])[0]
 
-    if sensore is None or sensore not in df.columns:
-        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido.", ""
+    if sensore is None or sensore not in df.columns or df.empty:
+        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido o il dataset è vuoto.", ""
 
-    def build_datetime(date_str, hour, minute):
-        return datetime.strptime(date_str, '%Y-%m-%d').replace(hour=hour, minute=minute)
+    def build_datetime_with_tz(date_str, hour, minute):
+        return datetime.strptime(f"{date_str} {hour}:{minute}", "%Y-%m-%d %H:%M")
 
     try:
         if sd and ed and not any([sh, sm, eh, em]):
-            start_dt = build_datetime(sd, 0, 0)
-            end_dt = build_datetime(ed, 23, 59)
+            start_dt = build_datetime_with_tz(sd, 0, 0)
+            end_dt = build_datetime_with_tz(ed, 23, 59)
         else:
             sh = int(sh) if sh else 0
             sm = int(sm) if sm else 0
@@ -106,12 +108,16 @@ def mostra_grafico(query_string):
             if ed and not (eh or em):
                 eh, em = 23, 59
 
-            start_dt = build_datetime(sd, sh, sm)
-            end_dt = build_datetime(ed, eh, em)
+            start_dt = build_datetime_with_tz(sd, sh, sm)
+            end_dt = build_datetime_with_tz(ed, eh, em)
     except Exception:
         return go.Figure(), "Errore nel formato di data o orario.", ""
+    
+    print(f"DEBUG: Filtering with interval: {start_dt} to {end_dt}")
 
     df_filtered = df[(df['created_at'] >= start_dt) & (df['created_at'] <= end_dt)]
+    
+    print(f"DEBUG: Found {len(df_filtered)} rows in the selected interval.")
 
     if df_filtered.empty:
         return go.Figure(), "Nessun dato trovato nell'intervallo selezionato.", ""
@@ -134,9 +140,7 @@ def mostra_grafico(query_string):
         xaxis_title='Date',
         yaxis_title='Values',
         template='plotly_white',
-        # Margini ottimizzati per schermi più piccoli
         margin=dict(l=20, r=20, t=50, b=20),
-        # Dimensioni font per il titolo e gli assi
         title_font_size=20,
         xaxis=dict(title_font_size=14, tickfont_size=10),
         yaxis=dict(title_font_size=14, tickfont_size=10)
@@ -149,4 +153,3 @@ def mostra_grafico(query_string):
 
     intervallo_testo = f"Intervallo selezionato: {start_dt.strftime('%d/%m/%Y %H:%M')} → {end_dt.strftime('%d/%m/%Y %H:%M')}"
     return fig, "", intervallo_testo
-

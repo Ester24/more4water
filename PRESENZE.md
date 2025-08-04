@@ -45,7 +45,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 31/07/2025 | 10:30 - 16:30 | 6 ore | Integrazione API ThingSpeak | |
+| 31/07/2025 | 10:30 - 16:30 | 6 ore | Esportazione database in CVS | |
 
 | | | | | |
 
