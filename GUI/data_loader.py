@@ -56,20 +56,6 @@ def carica_df_sanitizzato(percorso_csv):
                     dizionario_riga[col_name] = None
 
             dati_sensori.append(dizionario_riga)
-            
-            # Qui il debug per la riga problematica del 7 giugno
-            if dizionario_riga.get('created_at') and dizionario_riga['created_at'].isoformat().startswith('2025-06-07T00:00:00'):
-                print("\n--- DEBUG AGGRESSIVO: Traccia la riga problematica ---")
-                print("Dizionario riga del 7 giugno:", dizionario_riga)
-                valore_field7_debug = dizionario_riga.get('field7')
-                print(f"Valore di field7 dopo il troncamento: {valore_field7_debug}")
-                print("--- FINE DEBUG AGGRESSIVO ---\n")
-                
-                # Ora la verifica è sul valore troncato
-                if valore_field7_debug == 22.99:
-                    print("SUCCESS: Il valore è corretto!")
-                else:
-                    print("ERRORE CRITICO: Il valore è ancora errato.")
 
         return dati_sensori
 

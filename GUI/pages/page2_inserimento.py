@@ -1,7 +1,7 @@
 import dash
 from dash import html, dcc, Input, Output, State
 from datetime import datetime, date
-import pandas as pd  # Mantieniamo Pandas, ma lo usiamo in modo controllato
+import pandas as pd
 import os
 import dash_bootstrap_components as dbc
 from data_loader import carica_df_sanitizzato
@@ -67,8 +67,6 @@ def aggiorna_dati_e_layout(file_selezionato):
     # Convertiamo subito la lista in un DataFrame
     df_new = pd.DataFrame(dati_sensori)
     
-    # Poiché la nostra funzione di parsing manuale gestisce già gli errori,
-    # qui possiamo fare una verifica più semplice
     if df_new.empty:
         df_min_date = date(2020, 1, 1)
         df_max_date = date.today()
@@ -181,10 +179,7 @@ def aggiorna_dati_e_layout(file_selezionato):
                     ])
                 ]),
                 html.Div(id='selection-error-message', style={'color': 'red', 'textAlign': 'center', 'marginBottom': '20px'}),
-                html.Div(id='buttons-container', children=[
-                    html.Div(id='link-container'),
-                    dbc.Button("Back to Home", href="/", color="secondary", className="mt-3")
-                ])
+                html.Div(id='link-container', className='d-flex justify-content-center mt-4')
             ]),
             latest_timestamp_data
         )
@@ -242,7 +237,8 @@ def genera_link(sensore, sd, sh, sm, ed, eh, em, file_selezionato, latest_timest
     query = f"?file={file_selezionato}&sensore={sensore}&sd={sd}&sh={sh}&sm={sm}&ed={ed}&eh={eh}&em={em}"
     link_output = dcc.Link(
         dbc.Button("Generate Graph", color="success", className="me-1"),
-        href=f"/grafici{query}"
+        href=f"/grafici{query}",
+        style={'display': 'block', 'margin': '0 auto', 'width': 'fit-content'}
     )
 
     return link_output, error_message

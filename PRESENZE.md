@@ -14,14 +14,23 @@
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
 | 04/07/2025 | 09:30 - 13:30 | 4 ore | Setup ambiente di sviluppo, studio documentazione | |
+
+| | | | | |
+
+**Totale Settimana**: 4 ore
+
+### Settimana 2
+
+| Data | Orario | Durata | Attività Svolta | Note |
+|------|--------|--------|----------------|------|
 | 07/07/2025 | 10:00 - 14:00 | 4 ore | Analisi codice esistente, comprensione architettura | |
 | 08/07/2025 | 10:30 - 14:30 | 4 ore | Primi test con Plotly Dash | |
 | 08/07/2025 | 13:30 - 17:30 | 4 ore | Primi test con Plotly Dash | |
 | | | | | |
 
-**Totale Settimana**: 16 ore
+**Totale Settimana**: 12 ore
 
-### Settimana 2
+### Settimana 3
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
@@ -32,7 +41,7 @@
 
 **Totale Settimana**: 13 ore
 
-### Settimana 3
+### Settimana 4
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
@@ -41,7 +50,7 @@
 
 **Totale Settimana**: 6 ore
 
-### Settimana 4
+### Settimana 5
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
@@ -51,7 +60,7 @@
 
 **Totale Settimana**: 6 ore
 
-### Settimana 5
+### Settimana 6
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
@@ -60,6 +69,17 @@
 | | | | | |
 
 **Totale Settimana**: 6 ore
+
+### Settimana 7
+
+| Data | Orario | Durata | Attività Svolta | Note |
+|------|--------|--------|----------------|------|
+| 18/08/2025 | 12:30 - 17:30 | 5 ore | Risolti problemi con lettura secondo file CSV | |
+| 19/08/2025 | 12:30 - 16:30 | 4 ore | Risolti problemi con lettura secondo file CSV | |
+
+| | | | | |
+
+**Totale Settimana**:  ore
 
 ---
 
