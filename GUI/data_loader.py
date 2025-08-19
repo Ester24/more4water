@@ -4,7 +4,7 @@ import os
 from io import StringIO
 import math # Importiamo la libreria math per il troncamento
 
-def carica_df_sanitizzato(percorso_csv):
+def carica_df(percorso_csv):
     """
     Legge, pulisce e parsa il file CSV usando solo librerie standard di Python.
     Restituisce una lista di dizionari con date senza fuso orario.
@@ -60,5 +60,5 @@ def carica_df_sanitizzato(percorso_csv):
         return dati_sensori
 
     except Exception as e:
-        print(f"Si è verificato un errore in carica_df_sanitizzato: {e}")
+        print(f"Si è verificato un errore in carica_df: {e}")
         return []

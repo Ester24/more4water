@@ -25,7 +25,7 @@
 |------|--------|--------|----------------|------|
 | 07/07/2025 | 10:00 - 14:00 | 4 ore | Analisi codice esistente, comprensione architettura | |
 | 08/07/2025 | 10:30 - 14:30 | 4 ore | Primi test con Plotly Dash | |
-| 08/07/2025 | 13:30 - 17:30 | 4 ore | Primi test con Plotly Dash | |
+| 10/07/2025 | 13:30 - 17:30 | 4 ore | Primi test con Plotly Dash | |
 | | | | | |
 
 **Totale Settimana**: 12 ore
@@ -35,9 +35,10 @@
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
 | 14/07/2025 | 14:10 - 18:10 | 4 ore | Implementazione lettura CSV | |
-| DD/MM/YYYY | 10:30 - 15:30 | 5 ore | Design database SQLite | |
-| DD/MM/YYYY | 14:00 - 18:00 | 4 ore | Creazione prime pagine GUI | |
-| | | | | |
+| 15/07/2025 | 10:30 - 15:30 | 5 ore | Risolti problemi con lettura file CSV | |
+| 17/07/2025 | 14:00 - 18:00 | 4 ore | Creazione prime pagine GUI | |
+| | | | | | 
+Design database SQLite
 
 **Totale Settimana**: 13 ore
 
@@ -45,7 +46,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 24/07/2025 | 11:00 - 17:00 | 6 ore | Sistema autenticazione utenti | |
+| 24/07/2025 | 11:00 - 17:00 | 6 ore | Creazione prime pagine GUI | |
 | | | | | |
 
 **Totale Settimana**: 6 ore
@@ -54,7 +55,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 31/07/2025 | 10:30 - 16:30 | 6 ore | Esportazione database in CVS | |
+| 31/07/2025 | 10:30 - 16:30 | 6 ore | Creazione file CSS personalizzato  | |
 
 | | | | | |
 
@@ -64,7 +65,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 04/08/2025 | 10:30 - 16:30 | 6 ore | Risolti problemi con lettura secondo file CSV | |
+| 04/08/2025 | 10:30 - 16:30 | 6 ore | Design database SQLite | |
 
 | | | | | |
 
@@ -74,13 +75,41 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 18/08/2025 | 12:30 - 17:30 | 5 ore | Risolti problemi con lettura secondo file CSV | |
-| 19/08/2025 | 12:30 - 16:30 | 4 ore | Risolti problemi con lettura secondo file CSV | |
+| 18/08/2025 | 12:30 - 17:30 | 5 ore |  | |
+| 19/08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| 21/08/2025 | 12:30 - 16:30 | 4 ore |  | |
 
 | | | | | |
 
-**Totale Settimana**:  ore
+**Totale Settimana**:  13 ore
 
+### Settimana 8
+
+| Data | Orario | Durata | Attività Svolta | Note |
+|------|--------|--------|----------------|------|
+| /08/2025 | 12:30 - 17:30 | 4 ore |  | |
+| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+
+
+| | | | | |
+
+**Totale Settimana**:  
+---
+
+### Settimana 9
+
+| Data | Orario | Durata | Attività Svolta | Note |
+|------|--------|--------|----------------|------|
+| /08/2025 | 12:30 - 17:30 | 4 ore |  | |
+| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+
+
+| | | | | |
+
+**Totale Settimana**:  
 ---
 
 ## 🎯 Milestone Raggiunte

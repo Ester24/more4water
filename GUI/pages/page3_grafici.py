@@ -5,7 +5,7 @@ import pandas as pd
 import plotly.graph_objs as go
 from datetime import datetime, timezone, timedelta
 import os
-from data_loader import carica_df_sanitizzato
+from data_loader import carica_df
 
 # Registra la pagina Dash con path e titolo
 dash.register_page(__name__, path='/grafici', title='View Charts')
@@ -82,7 +82,7 @@ def mostra_grafico(query_string):
     csv_path = os.path.join(project_root, file_selezionato)
     
     # --- MODIFICA QUI: Convertiamo la lista in un DataFrame ---
-    dati_sensori = carica_df_sanitizzato(csv_path)
+    dati_sensori = carica_df(csv_path)
     df = pd.DataFrame(dati_sensori)
     
     sensore = params.get('sensore', [None])[0]

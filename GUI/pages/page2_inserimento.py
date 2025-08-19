@@ -4,7 +4,7 @@ from datetime import datetime, date
 import pandas as pd
 import os
 import dash_bootstrap_components as dbc
-from data_loader import carica_df_sanitizzato
+from data_loader import carica_df
 
 dash.register_page(__name__, path='/inserimento', title='Seleziona dati')
 
@@ -62,7 +62,7 @@ def aggiorna_dati_e_layout(file_selezionato):
     csv_path = os.path.join(project_root, file_selezionato)
     
     # La nostra funzione ora restituisce una lista di dizionari
-    dati_sensori = carica_df_sanitizzato(csv_path)
+    dati_sensori = carica_df(csv_path)
     
     # Convertiamo subito la lista in un DataFrame
     df_new = pd.DataFrame(dati_sensori)
