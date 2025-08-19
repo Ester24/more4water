@@ -38,7 +38,7 @@
 | 15/07/2025 | 10:30 - 15:30 | 5 ore | Risolti problemi con lettura file CSV | |
 | 17/07/2025 | 14:00 - 18:00 | 4 ore | Creazione prime pagine GUI | |
 | | | | | | 
-Design database SQLite
+
 
 **Totale Settimana**: 13 ore
 
@@ -75,8 +75,8 @@ Design database SQLite
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 18/08/2025 | 12:30 - 17:30 | 5 ore |  | |
-| 19/08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| 18/08/2025 | 12:30 - 17:30 | 5 ore | Implementazione del design responsivo | |
+| 19/08/2025 | 12:30 - 16:30 | 4 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
 | 21/08/2025 | 12:30 - 16:30 | 4 ore |  | |
 
 | | | | | |
