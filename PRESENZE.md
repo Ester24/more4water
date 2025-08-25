@@ -1,7 +1,7 @@
 # 📋 Registro Presenze - Tirocinio More4Water_GUI
 
 **Studentessa**: [Ester Bernardini]  
-**Tutor**: [Nome Tutor]  
+**Tutor**: [Alessio De Angelis]  
 **Periodo**: [04/07/2025] - [05/09/2025]  
 **Ore Totali Previste**: [75] ore
 
@@ -76,25 +76,24 @@
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
 | 18/08/2025 | 12:30 - 17:30 | 5 ore | Implementazione del design responsivo | |
-| 19/08/2025 | 12:30 - 16:30 | 4 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
-| 21/08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| 19/08/2025 | 12:30 - 16:30 | 5 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
+| 21/08/2025 | 12:30 - 16:30 | 2 ore |  | |
 
 | | | | | |
 
-**Totale Settimana**:  13 ore
+**Totale Settimana**:  12 ore
 
 ### Settimana 8
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| /08/2025 | 12:30 - 17:30 | 4 ore |  | |
-| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
-| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
-
+| 25/08/2025 | 09:30 - 13:30 | 4 ore |  | |
+| 26/08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| 28/08/2025 | 12:30 - 16:30 | 4 ore |  | |
 
 | | | | | |
 
-**Totale Settimana**:  
+**Totale Settimana**:  12 ore
 ---
 
 ### Settimana 9
@@ -102,9 +101,7 @@
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
 | /08/2025 | 12:30 - 17:30 | 4 ore |  | |
-| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
-| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
-| /08/2025 | 12:30 - 16:30 | 4 ore |  | |
+
 
 
 | | | | | |

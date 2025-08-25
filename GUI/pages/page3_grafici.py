@@ -3,7 +3,7 @@ from dash import dcc, html, Input, Output
 from urllib import parse
 import pandas as pd
 import plotly.graph_objs as go
-from datetime import datetime, timezone, timedelta
+from datetime import datetime
 import os
 from data_loader import carica_df
 
@@ -13,9 +13,6 @@ dash.register_page(__name__, path='/grafici', title='View Charts')
 # Percorso alla cartella principale del progetto
 current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
-
-# --- RIMOZIONE: Il DataFrame non viene più caricato all'avvio ---
-# Il caricamento verrà fatto all'interno della callback.
 
 # Dizionario per mappare nomi sensori più leggibili
 sensor_labels = {
@@ -46,7 +43,7 @@ layout = html.Div([
     html.Div(id='error-message', style={'color': 'red', 'textAlign': 'center', 'marginTop': '10px'}),
     html.Div(id='selected-dates', style={'textAlign': 'center', 'marginTop': '10px', 'fontWeight': 'bold'}),
     html.Div(
-        dcc.Link("Back to selection", href="/inserimento", className="btn btn-secondary"),
+        dcc.Link("Back to selection", href="/scelta", className="btn btn-secondary"),
         style={'textAlign': 'center', 'marginTop': '20px'}
     ),
     dcc.Location(id='url', refresh=False)
@@ -70,33 +67,40 @@ layout = html.Div([
     Input('url', 'search')
 )
 def mostra_grafico(query_string):
+    # Controllo iniziale della query string
     if not query_string:
         return go.Figure(), "Nessun parametro di ricerca trovato. Torna alla pagina di selezione per inserire i dati.", "", ""
 
     params = parse.parse_qs(query_string[1:])
     
     file_selezionato = params.get('file', [None])[0]
-    if not file_selezionato:
-        return go.Figure(), "Errore: nome del file non specificato nella query.", "", ""
-    
-    csv_path = os.path.join(project_root, file_selezionato)
-    
-    # --- MODIFICA QUI: Convertiamo la lista in un DataFrame ---
-    dati_sensori = carica_df(csv_path)
-    df = pd.DataFrame(dati_sensori)
-    
     sensore = params.get('sensore', [None])[0]
     sd = params.get('sd', [None])[0]
     ed = params.get('ed', [None])[0]
-    sh = int(params.get('sh', ['0'])[0])
-    sm = int(params.get('sm', ['0'])[0])
-    eh = int(params.get('eh', ['23'])[0])
-    em = int(params.get('em', ['59'])[0])
-
-    if not sensore or not df.columns.isin([sensore]).any() or df.empty:
-        return go.Figure(), f"Errore: il sensore '{sensore}' non è valido o il dataset è vuoto per il file '{file_selezionato}'.", "", ""
     
+    # Controllo che tutti i parametri essenziali siano presenti
+    if not file_selezionato or not sensore or not sd or not ed:
+        return go.Figure(), "Errore: parametri mancanti. Torna alla pagina di selezione per inserire i dati.", "", ""
+
+    # Caricamento e controllo del DataFrame
+    csv_path = os.path.join(project_root, file_selezionato)
+    df = carica_df(csv_path)
+
+    # Controllo se il DataFrame è vuoto dopo il caricamento
+    if df.empty:
+        return go.Figure(), f"Nessun dato valido trovato per il file '{file_selezionato}'.", "", ""
+    
+    # Controllo se la colonna del sensore esiste
+    if not sensore in df.columns:
+        return go.Figure(), f"Errore: il sensore '{sensore}' non esiste nel file '{file_selezionato}'.", "", ""
+    
+    # Conversione degli orari
     try:
+        sh = int(params.get('sh', ['0'])[0])
+        sm = int(params.get('sm', ['0'])[0])
+        eh = int(params.get('eh', ['23'])[0])
+        em = int(params.get('em', ['59'])[0])
+
         start_dt = datetime.strptime(f"{sd} {sh}:{sm}", "%Y-%m-%d %H:%M")
         end_dt = datetime.strptime(f"{ed} {eh}:{em}", "%Y-%m-%d %H:%M")
     except (ValueError, TypeError):
@@ -105,13 +109,14 @@ def mostra_grafico(query_string):
     if start_dt > end_dt:
         return go.Figure(), "Errore: la data/ora di inizio deve essere precedente o uguale a quella di fine.", "", ""
 
+    # Filtraggio del DataFrame
     df_filtered = df[(df['created_at'] >= start_dt) & (df['created_at'] <= end_dt)]
 
     if df_filtered.empty:
         return go.Figure(), "Nessun dato trovato nell'intervallo selezionato. Prova un intervallo diverso.", "", ""
 
+    # Creazione del grafico
     label_sensore = sensor_labels.get(sensore, sensore)
-
     fig = go.Figure()
     fig.add_trace(go.Scatter(
         x=df_filtered['created_at'],
@@ -131,7 +136,7 @@ def mostra_grafico(query_string):
         xaxis=dict(title_font_size=14, tickfont_size=10),
         yaxis=dict(title_font_size=14, tickfont_size=10)
     )
-
+    
     fig.update_xaxes(
         tickformat='%d %b %y',
         tickangle=0

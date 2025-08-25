@@ -17,7 +17,7 @@ layout = dbc.Container([
 
     dbc.Row([
         dbc.Col(
-            dbc.Button("View Charts", href="/inserimento", color="primary", className="w-100"),
+            dbc.Button("View Charts", href="/scelta", color="primary", className="w-100"),
             xs=12, sm=6, md=4, lg=3
         ),
         dbc.Col(
