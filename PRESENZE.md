@@ -76,8 +76,8 @@
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
 | 18/08/2025 | 12:30 - 17:30 | 5 ore | Implementazione del design responsivo | |
-| 19/08/2025 | 12:30 - 16:30 | 5 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
-| 21/08/2025 | 12:30 - 16:30 | 2 ore |  | |
+| 19/08/2025 | 12:30 - 16:30 | 5 ore | Implementazione del design responsivo | |
+| 21/08/2025 | 12:30 - 16:30 | 2 ore | Integrazione API ThingSpeak | |
 
 | | | | | |
 
@@ -87,9 +87,9 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| 25/08/2025 | 09:30 - 13:30 | 4 ore |  | |
-| 26/08/2025 | 12:30 - 16:30 | 4 ore |  | |
-| 28/08/2025 | 12:30 - 16:30 | 4 ore |  | |
+| 25/08/2025 | 09:30 - 13:30 | 4 ore | Integrazione API ThingSpeak | |
+| 26/08/2025 | 12:30 - 16:30 | 4 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
+| 28/08/2025 | 12:30 - 16:30 | 4 ore | Analisi della documentazione per la messa in produzione dell'applicazione | |
 
 | | | | | |
 
@@ -100,7 +100,7 @@
 
 | Data | Orario | Durata | Attività Svolta | Note |
 |------|--------|--------|----------------|------|
-| /08/2025 | 12:30 - 17:30 | 4 ore |  | |
+| 01/09/2025 | 12:30 - 17:30 | 4 ore |  | |
 
 
 

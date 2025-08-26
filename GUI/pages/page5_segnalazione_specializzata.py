@@ -12,16 +12,28 @@ current_dir = os.path.dirname(__file__)
 project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
 csv_path = os.path.join(project_root, 'feeds.csv')
 
-df = pd.read_csv(csv_path)  # Se non ti serve la data, puoi togliere parse_dates
+df = pd.read_csv(csv_path)
 
 # Lista sensori = colonne field1..field7 che esistono
 sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
 
-# Opzioni per il dropdown
-dropdown_options = [{'label': s, 'value': s} for s in sensori]
+# --- MODIFICA APPORTATA QUI ---
+# Opzioni per il dropdown con etichette personalizzate
+dropdown_options = []
+for s in sensori:
+    # Estrae il numero dal nome del sensore (es. 'field1' -> '1')
+    try:
+        sensor_number = s.replace('field', '')
+        # Crea la label nel formato "Sensore X"
+        label = f'Sensor {sensor_number}'
+        dropdown_options.append({'label': label, 'value': s})
+    except (ValueError, IndexError):
+        # Gestisce il caso in cui il nome non sia nel formato atteso
+        dropdown_options.append({'label': s, 'value': s})
+# --------------------------------
 
 layout = dbc.Container([
-    html.H2("Submit a New Report"), # Tradotto "Inserisci una nuova segnalazione"
+    html.H2("Submit a New Report"),
     dbc.Form([
         dbc.Label("Report Priority", className="mt-3"), 
         dcc.Dropdown(
@@ -44,11 +56,11 @@ layout = dbc.Container([
         dcc.Dropdown(
             id='issue_type',
             options=[
-                {'label': 'Sensor not responding', 'value': 'sensor_not_responding'}, # Tradotto
-                {'label': 'Anomalous values', 'value': 'anomalous_values'},         # Tradotto
-                {'label': 'Low battery', 'value': 'low_battery'},                   # Tradotto
-                {'label': 'Connection issue', 'value': 'connection_issue'},         # Tradotto
-                {'label': 'Other', 'value': 'other'}                                # Tradotto
+                {'label': 'Sensor not responding', 'value': 'sensor_not_responding'},
+                {'label': 'Anomalous values', 'value': 'anomalous_values'},
+                {'label': 'Low battery', 'value': 'low_battery'},
+                {'label': 'Connection issue', 'value': 'connection_issue'},
+                {'label': 'Other', 'value': 'other'}
             ],
             placeholder='Select issue type', 
             clearable=False,
@@ -67,7 +79,6 @@ layout = dbc.Container([
 @dash.callback(
     Output('output_msg', 'children'),
     Input('submit_btn', 'n_clicks'),
-    #State('user_id', 'value'), 
     State('sensor_id', 'value'),
     State('issue_type', 'value'),
     State('description', 'value'),
@@ -79,7 +90,7 @@ def submit_report(n_clicks, sensor_id, issue_type, description, priority):
     if not all([sensor_id, issue_type]):
         return dbc.Alert("Sensor ID and Issue Type are mandatory.", color="danger")
     try:
-        user_id = None  # perché non hai ancora login
+        user_id = None
         insert_report(user_id, sensor_id, issue_type, description or '', priority or 1)
         return dbc.Alert("Report submitted successfully!", color="success")
     except Exception as e:
