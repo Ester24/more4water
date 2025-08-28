@@ -5,10 +5,12 @@ from io import StringIO
 import math
 from datetime import datetime
 import csv
-# https://thingspeak.mathworks.com/channels/1293177
+
 # --- ID del canale ThingSpeak da utilizzare per i dati in tempo reale ---
-THINGSPEAK_CHANNEL_ID = '1293177'
-# THINGSPEAK_API_KEY = 'YOUR_API_KEY' # Sostituisci con la tua API key di lettura
+
+
+THINGSPEAK_CHANNEL_ID = '2992105'
+THINGSPEAK_API_KEY = 'UOGYVIFOFTWN7P3F'
 
 def carica_df_thingspeak():
     """
@@ -18,8 +20,7 @@ def carica_df_thingspeak():
         pandas.DataFrame: Un DataFrame con i dati, o un DataFrame vuoto in caso di errore.
     """
     try:
-        #url = f"https://api.thingspeak.com/channels/{THINGSPEAK_CHANNEL_ID}/feeds.json?results=100&api_key={THINGSPEAK_API_KEY}"
-        url = f"https://api.thingspeak.com/channels/{THINGSPEAK_CHANNEL_ID}/feeds.json?results=100"
+        url = f"https://api.thingspeak.com/channels/{THINGSPEAK_CHANNEL_ID}/feeds.json?results=100&api_key={THINGSPEAK_API_KEY}"
         response = requests.get(url)
         response.raise_for_status()
         data = response.json()

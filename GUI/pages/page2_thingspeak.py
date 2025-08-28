@@ -8,13 +8,13 @@ from data_loader import carica_df_thingspeak
 
 # Mappa dei nomi dei sensori per una migliore leggibilità
 SENSOR_NAMES = {
-    'field1': 'Temperature',
-    'field2': 'Humidity',
-    'field3': 'Barometric Pressure',
-    'field4': 'Wind Speed',
-    'field5': 'Wind Direction',
-    'field6': 'Gust Speed',
-    'field7': 'Rainfall'
+    'field1': 'Null',
+    'field2': 'Null',
+    'field3': 'Water Level',
+    'field4': 'Null',
+    'field5': 'Null',
+    'field6': 'Null',
+    'field7': 'Temperature'
 }
 
 # Registra la pagina con il router di Dash
