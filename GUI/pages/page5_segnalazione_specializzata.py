@@ -4,7 +4,7 @@ import dash
 from dash import html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
 from db_utils import insert_report
-from export_db_to_csv import esporta_database_in_csv
+from export_file import esporta_database_in_csv
 
 dash.register_page(__name__, path='/segnalazione_specializzata', title='Insert Report') 
 

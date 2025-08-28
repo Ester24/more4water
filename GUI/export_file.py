@@ -1,6 +1,28 @@
 import os
 import sqlite3
 import pandas as pd
+import base64
+import uuid
+
+# Funzione per salvare l'immagine
+def save_image(contents, filename):
+    # La cartella 'uploads' deve esistere nel tuo progetto
+    upload_folder = os.path.join(os.getcwd(), 'uploads')
+    os.makedirs(upload_folder, exist_ok=True)
+    
+    # Decodifica il contenuto base64
+    content_type, content_string = contents.split(',')
+    decoded = base64.b64decode(content_string)
+    
+    # Crea un nome file univoco
+    unique_filename = f"{uuid.uuid4()}_{filename}"
+    
+    file_path = os.path.join(upload_folder, unique_filename)
+    
+    with open(file_path, 'wb') as f:
+        f.write(decoded)
+        
+    return unique_filename
 
 # Percorso al database
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

@@ -2,8 +2,10 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output, State
 import os
+import base64
+import uuid
 from db_utils import insert_general_report
-from export_db_to_csv import esporta_database_in_csv
+from export_file import esporta_database_in_csv, save_image
 
 dash.register_page(__name__, path='/segnalazione_generica', title='MORE4WATER - General Report')
 
@@ -33,6 +35,23 @@ layout = dbc.Container([
         dbc.Label("Problem Description", html_for="problem_description", className="mt-3"),
         dbc.Textarea(id="problem_description", placeholder="Describe the problem here...", rows=5),
 
+        # Componente per il caricamento file
+        dbc.Label("Attach a photo (optional)", className="mt-3"),
+        dcc.Upload(
+            id='upload-image',
+            children=html.Div([
+                'Drag and Drop or ',
+                html.A('Select Files')
+            ]),
+            style={
+                'width': '100%', 'height': '60px', 'lineHeight': '60px',
+                'borderWidth': '1px', 'borderStyle': 'dashed',
+                'borderRadius': '5px', 'textAlign': 'center', 'margin': '10px 0'
+            },
+            multiple=False
+        ),
+        html.Div(id='upload-status'),
+
         dbc.Button("Submit Report", id="submit_general_report_btn", color="primary", className="mt-4"),
         html.Div(id='general_report_output_msg', className='mt-3')
     ])
@@ -48,17 +67,27 @@ layout = dbc.Container([
     State('city', 'value'),
     State('address', 'value'),
     State('problem_description', 'value'),
+    State('upload-image', 'contents'),
+    State('upload-image', 'filename')
 )
-def submit_general_report_callback(n_clicks, first_name, last_name, region, province, city, address, problem_description):
+def submit_general_report_callback(n_clicks, first_name, last_name, region, province, city, address, problem_description, image_contents, image_filename):
     if not n_clicks:
         return ''
 
-    # Validazione minima: almeno nome, cognome e descrizione del problema
+    # Validazione minima
     if not all([first_name, last_name, problem_description]):
         return dbc.Alert("First Name, Last Name, and Problem Description are mandatory.", color="danger")
+    
+    # Salva la foto se presente
+    image_path = None
+    if image_contents:
+        try:
+            image_path = save_image(image_contents, image_filename)
+        except Exception as e:
+            return dbc.Alert(f"Errore durante il caricamento della foto: {str(e)}", color="danger")
 
     try:
-        # Passaggio 1: Inserimento nel database
+        # Assicurati che la tua funzione insert_general_report possa accettare il nome del file immagine
         insert_general_report(
             first_name,
             last_name,
@@ -66,10 +95,11 @@ def submit_general_report_callback(n_clicks, first_name, last_name, region, prov
             province or '',
             city or '',
             address or '',
-            problem_description
+            problem_description,
+            image_path # Passa il nome del file immagine alla funzione di inserimento
         )
         
-        # Passaggio 2: Esportazione in CSV
+        # Esportazione in CSV
         esporta_database_in_csv()
 
         return dbc.Alert("General report submitted and data exported to CSV successfully!", color="success")
