@@ -1,3 +1,3 @@
-id,timestamp,first_name,last_name,region,province,city,address,problem_description
-1,2025-07-31 12:27:57,Ester,Bernardini,Umbria,Perugia,Perugia,"Viale Enzo Paolo Tiberi, 14",ciaoooo
-2,2025-08-18 12:29:58,Ester,Bernardini,Umbria,,Perugia,"Viale Enzo Paolo Tiberi, 14",ciao
+id,timestamp,first_name,last_name,region,province,city,address,problem_description,image_path
+1,2025-08-28 16:21:31,Ester,Bernardini,Umbris,Perugia,Perugia,"Viale Enzo Paolo Tiberi, 14",ok,
+2,2025-08-28 16:22:33,Ester,Bernardini,Umbria,Perugia,Todi,"Via delle Caselle,22",eee,

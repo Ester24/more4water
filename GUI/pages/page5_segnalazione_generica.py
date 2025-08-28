@@ -102,6 +102,6 @@ def submit_general_report_callback(n_clicks, first_name, last_name, region, prov
         # Esportazione in CSV
         esporta_database_in_csv()
 
-        return dbc.Alert("General report submitted and data exported to CSV successfully!", color="success")
+        return dbc.Alert("General report submitted", color="success")
     except Exception as e:
         return dbc.Alert(f"Error submitting report or exporting data: {str(e)}", color="danger")

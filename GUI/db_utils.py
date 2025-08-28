@@ -1,20 +1,17 @@
 import os
 import sqlite3
-from datetime import datetime # Importa datetime per i timestamp
+from datetime import datetime
+import pandas as pd
 
 # Percorso assoluto al file mydatabase.db
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, 'mydatabase.db')
 
 # --- Funzione per l'inserimento di Segnalazioni Specializzate ---
-# Questa funzione è utilizzata dalla pagina '/segnalazione_specializzata'
-# per registrare segnalazioni che includono Sensor ID, Issue Type e Priority.
 def insert_report(user_id, sensor_id, issue_type, description, priority=1):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Crea la tabella 'reports' se non esiste.
-    # Aggiunto 'timestamp' per registrare quando la segnalazione è stata fatta.
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS reports (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -28,7 +25,7 @@ def insert_report(user_id, sensor_id, issue_type, description, priority=1):
     ''')
     conn.commit()
 
-    timestamp = datetime.now().isoformat() # Genera il timestamp corrente
+    timestamp = datetime.now().isoformat()
 
     query = '''
         INSERT INTO reports (timestamp, user_id, sensor_id, issue_type, description, priority)
@@ -38,15 +35,12 @@ def insert_report(user_id, sensor_id, issue_type, description, priority=1):
     conn.commit()
     conn.close()
 
-# --- Funzione per l'inserimento di Segnalazioni Generiche ---
-# Questa funzione è utilizzata dalla pagina '/segnalazione_generica'
-# per registrare segnalazioni con i dettagli dell'utente e la località.
-def insert_general_report(first_name, last_name, region, province, city, address, problem_description):
+# --- Funzione per l'inserimento di Segnalazioni Generiche (MODIFICATA) ---
+def insert_general_report(first_name, last_name, region, province, city, address, problem_description, image_path):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Crea la tabella 'general_reports' se non esiste.
-    # Aggiunto 'timestamp' per registrare quando la segnalazione è stata fatta.
+    # Aggiunta la colonna 'image_path' alla tabella 'general_reports'
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS general_reports (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -57,17 +51,18 @@ def insert_general_report(first_name, last_name, region, province, city, address
             province TEXT,
             city TEXT,
             address TEXT,
-            problem_description TEXT
+            problem_description TEXT,
+            image_path TEXT  -- Nuova colonna per salvare il percorso dell'immagine
         )
     ''')
     conn.commit()
 
-    timestamp = datetime.now().isoformat() # Genera il timestamp corrente
+    timestamp = datetime.now().isoformat()
 
     query = '''
-        INSERT INTO general_reports (timestamp, first_name, last_name, region, province, city, address, problem_description)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO general_reports (timestamp, first_name, last_name, region, province, city, address, problem_description, image_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     '''
-    cursor.execute(query, (timestamp, first_name, last_name, region, province, city, address, problem_description))
+    cursor.execute(query, (timestamp, first_name, last_name, region, province, city, address, problem_description, image_path))
     conn.commit()
     conn.close()
