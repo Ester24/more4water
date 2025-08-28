@@ -3,7 +3,7 @@ import pandas as pd
 import dash
 from dash import html, dcc, Input, Output, State
 import dash_bootstrap_components as dbc
-from db_utils import insert_report
+from db_utils import insert_report, esporta_database_in_csv
 
 dash.register_page(__name__, path='/segnalazione_specializzata', title='Insert Report') 
 
@@ -21,7 +21,6 @@ sensori = [f'field{i}' for i in range(1, 8) if f'field{i}' in df.columns]
 # Opzioni per il dropdown con etichette personalizzate
 dropdown_options = []
 for s in sensori:
-    # Estrae il numero dal nome del sensore (es. 'field1' -> '1')
     try:
         sensor_number = s.replace('field', '')
         # Crea la label nel formato "Sensore X"
@@ -91,7 +90,12 @@ def submit_report(n_clicks, sensor_id, issue_type, description, priority):
         return dbc.Alert("Sensor ID and Issue Type are mandatory.", color="danger")
     try:
         user_id = None
+        # Passo 1: Inserimento del report nel database
         insert_report(user_id, sensor_id, issue_type, description or '', priority or 1)
-        return dbc.Alert("Report submitted successfully!", color="success")
+        
+        # Passo 2: Esportazione in CSV
+        esporta_database_in_csv()
+
+        return dbc.Alert("Report submitted and data exported to CSV successfully!", color="success")
     except Exception as e:
-        return dbc.Alert(f"Error: {str(e)}", color="danger")
+        return dbc.Alert(f"Error submitting report or exporting data: {str(e)}", color="danger")

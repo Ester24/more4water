@@ -2,38 +2,20 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output, State
 import os
-from db_utils import insert_general_report # Dovrai implementare questa funzione
+from db_utils import insert_general_report, esporta_database_in_csv # Assicurati di importare esporta_database_in_csv
 
 dash.register_page(__name__, path='/segnalazione_generica', title='MORE4WATER - General Report')
 
 layout = dbc.Container([
-    # Opzionale: puoi includere il logo o una versione più piccola anche qui
-    # html.Div(
-    #     html.Img(src="/assets/logo.png", style={"height": "150px"}),
-    #     className="text-center my-4"
-    # ),
-
-    # RIMOSSO: html.Hr(), # Questa riga è stata rimossa per eliminare lo spazio extra
-
-    html.H2("Submit a General User Report", className="text-center mb-4 mt-0"), # Aggiunto mt-0 per rimuovere il margine superiore
+    html.H2("Submit a General User Report", className="text-center mb-4 mt-0"),
 
     dbc.Form([
         dbc.Row([
-            dbc.Col(
-                html.Div([
-                    dbc.Label("First Name", html_for="first_name", className="mt-3"),
-                    dbc.Input(id="first_name", type="text", placeholder="Enter your first name"),
-                ]),
-                md=6
-            ),
-            dbc.Col(
-                html.Div([
-                    dbc.Label("Last Name", html_for="last_name", className="mt-3"),
-                    dbc.Input(id="last_name", type="text", placeholder="Enter your last name"),
-                ]),
-                md=6
-            ),
-        ], className="mb-3"), # Margine inferiore per la riga nome/cognome
+            dbc.Col(html.Div([dbc.Label("First Name", html_for="first_name", className="mt-3"),
+                             dbc.Input(id="first_name", type="text", placeholder="Enter your first name")]), md=6),
+            dbc.Col(html.Div([dbc.Label("Last Name", html_for="last_name", className="mt-3"),
+                             dbc.Input(id="last_name", type="text", placeholder="Enter your last name")]), md=6),
+        ], className="mb-3"),
 
         dbc.Label("Region", html_for="region", className="mt-3"),
         dbc.Input(id="region", type="text", placeholder="Umbria"),
@@ -51,11 +33,9 @@ layout = dbc.Container([
         dbc.Textarea(id="problem_description", placeholder="Describe the problem here...", rows=5),
 
         dbc.Button("Submit Report", id="submit_general_report_btn", color="primary", className="mt-4"),
-
         html.Div(id='general_report_output_msg', className='mt-3')
     ])
-], fluid=True, className="py-0") # Modificato da "py-5" a "py-0" per rimuovere il padding verticale dal container principale
-
+], fluid=True, className="py-0")
 
 @dash.callback(
     Output('general_report_output_msg', 'children'),
@@ -77,6 +57,7 @@ def submit_general_report_callback(n_clicks, first_name, last_name, region, prov
         return dbc.Alert("First Name, Last Name, and Problem Description are mandatory.", color="danger")
 
     try:
+        # Passaggio 1: Inserimento nel database
         insert_general_report(
             first_name,
             last_name,
@@ -86,6 +67,10 @@ def submit_general_report_callback(n_clicks, first_name, last_name, region, prov
             address or '',
             problem_description
         )
-        return dbc.Alert("General report submitted successfully!", color="success")
+        
+        # Passaggio 2: Esportazione in CSV
+        esporta_database_in_csv()
+
+        return dbc.Alert("General report submitted and data exported to CSV successfully!", color="success")
     except Exception as e:
-        return dbc.Alert(f"Error submitting report: {str(e)}", color="danger")
+        return dbc.Alert(f"Error submitting report or exporting data: {str(e)}", color="danger")
