@@ -2,7 +2,8 @@ import dash
 import dash_bootstrap_components as dbc
 from dash import dcc, html, Input, Output, State
 import os
-from db_utils import insert_general_report, esporta_database_in_csv # Assicurati di importare esporta_database_in_csv
+from db_utils import insert_general_report
+from export_db_to_csv import esporta_database_in_csv
 
 dash.register_page(__name__, path='/segnalazione_generica', title='MORE4WATER - General Report')
 
