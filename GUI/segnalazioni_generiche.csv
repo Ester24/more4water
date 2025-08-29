@@ -1,3 +1,6 @@
-id,timestamp,first_name,last_name,region,province,city,address,problem_description,image_path
-1,2025-08-28 16:21:31,Ester,Bernardini,Umbris,Perugia,Perugia,"Viale Enzo Paolo Tiberi, 14",ok,
-2,2025-08-28 16:22:33,Ester,Bernardini,Umbria,Perugia,Todi,"Via delle Caselle,22",eee,
+id,timestamp,first_name,last_name,province,city,address,problem_description,image_path
+1,2025-08-29 09:27:33,Ester,Bernardini,PG,Perugia,"Viale Enzo Paolo Tiberi, 14",Prima segnalazione con foto,7308ba03-381c-4e41-8850-d15c2e6b0cef_mobile.jpg
+2,2025-08-29 09:29:20,Ester,Bernardini,PG,Perugia,"Viale Enzo Paolo Tiberi, 14",Secondo report,
+3,2025-08-29 09:32:20,Ester,Bernardini,PG,Perugia,"Viale Enzo Paolo Tiberi, 14",Secondo report con foto,159e7964-bd15-44c8-9a37-578a646ed9b3_more4water.png
+4,2025-08-29 09:39:25,Ester,Bernardini,PG,Perugia,"Viale Enzo Paolo Tiberi, 14",Ciaoo,
+5,2025-08-29 09:41:53,Ester,Bernardini,PG,Perugia,"Viale Enzo Paolo Tiberi, 14",Terza,

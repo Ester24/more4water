@@ -1,3 +1,2 @@
 id,user_id,sensor_id,issue_type,description,priority,status,timestamp,created_at
-1,,field3,low_battery,ee,4,open,2025-08-28 16:21:44,2025-08-28 14:21:44
-2,,field4,low_battery,eeeee,4,open,2025-08-28 16:22:46,2025-08-28 14:22:46
+1,,field3,low_battery,,4,open,2025-08-29 09:28:08,2025-08-29 07:28:08

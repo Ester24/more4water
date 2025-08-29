@@ -36,33 +36,33 @@ def insert_report(user_id, sensor_id, issue_type, description, priority=1):
     conn.close()
 
 # --- Funzione per l'inserimento di Segnalazioni Generiche (MODIFICATA) ---
-def insert_general_report(first_name, last_name, region, province, city, address, problem_description, image_path):
+def insert_general_report(first_name, last_name, province, city, address, problem_description, image_path):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    # Aggiunta la colonna 'image_path' alla tabella 'general_reports'
+    # Rimuovi la colonna 'region' dal comando CREATE TABLE
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS general_reports (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             timestamp TEXT,
             first_name TEXT,
             last_name TEXT,
-            region TEXT,
             province TEXT,
             city TEXT,
             address TEXT,
             problem_description TEXT,
-            image_path TEXT  -- Nuova colonna per salvare il percorso dell'immagine
+            image_path TEXT 
         )
     ''')
     conn.commit()
 
     timestamp = datetime.now().isoformat()
 
+    # Rimuovi 'region' dalla query INSERT e dal tuple dei valori
     query = '''
-        INSERT INTO general_reports (timestamp, first_name, last_name, region, province, city, address, problem_description, image_path)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO general_reports (timestamp, first_name, last_name, province, city, address, problem_description, image_path)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     '''
-    cursor.execute(query, (timestamp, first_name, last_name, region, province, city, address, problem_description, image_path))
+    cursor.execute(query, (timestamp, first_name, last_name, province, city, address, problem_description, image_path))
     conn.commit()
     conn.close()

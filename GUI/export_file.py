@@ -6,6 +6,7 @@ import uuid
 
 # Funzione per salvare l'immagine
 def save_image(contents, filename):
+    """Salva un'immagine decodificata in una cartella di upload e restituisce il nome del file."""
     # La cartella 'uploads' deve esistere nel tuo progetto
     upload_folder = os.path.join(os.getcwd(), 'uploads')
     os.makedirs(upload_folder, exist_ok=True)
@@ -30,6 +31,7 @@ DB_PATH = os.path.join(BASE_DIR, 'mydatabase.db')
 
 # Funzione per estrarre dati da una tabella e formattare i timestamp, se esistono
 def estrai_tabella_e_formatta(nome_tabella):
+    """Estrae una tabella dal database, formatta le colonne con timestamp e restituisce un DataFrame."""
     conn = sqlite3.connect(DB_PATH)
     df = pd.DataFrame()
     try:
@@ -51,23 +53,24 @@ def estrai_tabella_e_formatta(nome_tabella):
 
 # Funzione principale per esportare in CSV
 def esporta_database_in_csv():
+    """Esporta le tabelle 'reports' e 'general_reports' in file CSV."""
     # Tabella: reports (segnalazioni specializzate)
     df_reports = estrai_tabella_e_formatta("reports")
     if not df_reports.empty:
         csv_reports_path = os.path.join(BASE_DIR, "segnalazioni_specializzate.csv")
         df_reports.to_csv(csv_reports_path, index=False, encoding="utf-8")
-        print(f"Esportata tabella reports in: {csv_reports_path}")
     else:
-        print("La tabella 'reports' è vuota o non è stato possibile leggerla.")
+        # Se la tabella è vuota o non è stato possibile leggerla, non fa nulla
+        pass
 
     # Tabella: general_reports (segnalazioni generiche)
     df_general = estrai_tabella_e_formatta("general_reports")
     if not df_general.empty:
         csv_general_path = os.path.join(BASE_DIR, "segnalazioni_generiche.csv")
         df_general.to_csv(csv_general_path, index=False, encoding="utf-8")
-        print(f"Esportata tabella general_reports in: {csv_general_path}")
     else:
-        print("La tabella 'general_reports' è vuota o non è stato possibile leggerla.")
+        # Se la tabella è vuota o non è stato possibile leggerla, non fa nulla
+        pass
 
 # Esecuzione
 if __name__ == "__main__":
