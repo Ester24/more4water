@@ -27,7 +27,7 @@ def create_tables():
         description TEXT,
         priority INTEGER DEFAULT 1,
         status TEXT DEFAULT 'open',
-        timestamp TEXT,  -- Ho aggiunto questa riga
+        timestamp TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id)
     )
@@ -40,7 +40,6 @@ def create_tables():
         timestamp TEXT,
         first_name TEXT,
         last_name TEXT,
-        region TEXT,
         province TEXT,
         city TEXT,
         address TEXT,
